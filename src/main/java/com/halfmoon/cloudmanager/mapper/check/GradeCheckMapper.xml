@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper
+	namespace="com.halfmoon.cloudmanager.dao.sql.check.impl.GradeCheckDao">
+	
+	<select id="get"
+			parameterType="int"
+			resultMap="gradeCheckResultMap">
+		<!-- id, check_id, name, creator_id, checker_type, cycle, remark -->
+		SELECT *
+		FROM grade_check
+		WHERE id = #{grade_check_id}
+	
+	</select>
+	
+	<!-- Mybatis读取json必需使用MySQL的原生json操作方法，否则中文会乱码 -->
+	<select id="getAllDetailsOfSingleCheck"
+			parameterType="int"
+			resultMap="gradeRecordResultMap">
+	
+		SELECT id, user_id, JSON_EXTRACT(grading_items, '$') AS grading_items, remark
+		FROM detailed_grade_check
+		WHERE single_grade_check_id = #{single_grade_check_id}
+	
+	</select>
+	
+	<select id="getSingleChecksByCycle"
+			parameterType="map"
+			resultType="com.halfmoon.cloudmanager.model.check.SingleGradeCheck">
+	
+		CALL proc_get_single_check(#{grade_check_id}, #{cycle_time}, 'grade')
+	
+	</select>
+	
+	<select id="getRawResultData"
+			parameterType="int"
+			resultMap="rawDataResultMap">
+			
+		SELECT user.name, JSON_EXTRACT(dg.grading_items, '$') AS grading_items, sg.create_time AS date
+		FROM detailed_grade_check AS dg
+		LEFT JOIN user ON dg.user_id = user.id
+		LEFT JOIN single_grade_check AS sg ON sg.id = dg.single_grade_check_id
+		WHERE sg.grade_check_id = #{grade_check_id}
+		<if test="user_id != null">
+			AND dg.user_id = #{user_id}
+		</if>
+	
+	</select>
+	
+	<select id="getGradingItems"
+			parameterType="int"
+			resultType="com.halfmoon.cloudmanager.model.check.GradingItem">
+		
+		SELECT * 
+		FROM grading_item
+		WHERE grade_check_id = #{grade_check_id}
+		
+	</select>
+	
+	<resultMap id="gradeRecordResultMap"
+			   type="com.halfmoon.cloudmanager.response.check.GradeRecord">
+	
+		<id property="id" column="id"></id>
+		
+		<association property="user"
+					 column="user_id"
+					 javaType="com.halfmoon.cloudmanager.response.user.UserInfo"
+					 select="com.halfmoon.cloudmanager.dao.sql.user.impl.UserDao.getUserInfo"></association>
+		
+	</resultMap>
+	
+	<resultMap id="gradeCheckResultMap"
+			   type="com.halfmoon.cloudmanager.response.check.GradeCheckInfo">
+			   
+		<id property="id" column="id"></id>
+		
+		<association property="creator"
+					 column="creator_id"
+					 javaType="com.halfmoon.cloudmanager.response.user.UserInfo"
+					 select="com.halfmoon.cloudmanager.dao.sql.user.impl.UserDao.getUserInfo"></association>
+					 
+		<collection property="grading_items"
+					 column="id"
+					 ofType="com.halfmoon.cloudmanager.model.check.GradingItem"
+					 select="getGradingItems"></collection>
+	
+	</resultMap>
+	
+	<resultMap id="rawDataResultMap"
+			   type="map">
+			   
+		<id column="id"></id>
+		
+		<result column="grading_items"
+				property="grading_items"
+				javaType="com.google.gson.JsonArray"></result>
+			   
+	</resultMap>
+	
+</mapper>

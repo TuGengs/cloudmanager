@@ -1,0 +1,54 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>高校云管理</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no">
+<meta name="apple-touch-fullscreen" content="YES">
+<meta name="format-detection" content="telephone=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<link rel="stylesheet" type="text/css" href="../css/common.css"/>
+<link rel="stylesheet" type="text/css" href="../css/login.css"/>
+<script src="../js/common.js"></script>
+</head>
+
+<body>
+	<img id="login-logo" src="../images/login-logo.png"/>  
+    <section id="login-box">
+    	<!--<img class="login-icon" src="../images/login-icon.png"/>-->
+        <div class="login-icon"><i>&#xe605;</i></div>
+        <form id="form">
+            <a>
+            	<i class="username">账号</i>
+            	<input type="text" class="reg_number" name="tel">
+            </a>
+            <a>
+            	<i class="password">密码</i>
+            	<input type="password" class="reg_password" name="password">
+            </a>
+        </form>
+        <a class="login-btn" id="login"></a>
+    </section>	
+   	<hr>
+    <a href="/register1" id="register">注册账号</a>
+    <script>
+        var loginBtn = document.getElementById('login'),
+			form = document.getElementById('form');
+        loginBtn.addEventListener('click',function login(){
+            gx.ajax({
+                url: '/api/account/login',
+                method: 'POST',
+                data: gx.getFormData(form,['tel','password']),
+                success: function(data){
+                    if(data.success) location.href = '/';
+                    alert('登录失败');
+                },
+                error: function(err){
+                    alert('登录失败');
+                }
+            })
+        })
+    </script>
+</body>
+</html>

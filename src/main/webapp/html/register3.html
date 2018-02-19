@@ -1,0 +1,63 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>学生注册页面3</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no">
+<meta name="apple-touch-fullscreen" content="YES">
+<meta name="format-detection" content="telephone=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<link href="css/common.css" rel="stylesheet" type="text/css">
+<link href="css/login.css" rel="stylesheet" type="text/css">
+<link rel="stylesheet" type="text/css" href="../css/register3.css"/>
+<link rel="stylesheet" type="text/css" href="../css/common.css"/>
+</head>
+
+<body>
+	<div class="top">高校云管理</div>
+	<header>注册</header>
+    <section class="register2_box">
+    	<form class="register2_form" action="" method="" id="form">
+            <a>
+            	<i>班级</i>
+            	<input type="text" class="stu_class" name="class_id">
+            </a>
+            	<a>
+            	<i >学号</i>
+            	<input type="text" class="stu_num" name="sysnum">
+            </a>
+            <a>
+            	<i >楼栋</i>
+            	<input type="text" class="stu_building" name="building_id">
+            </a>
+            <a>
+            	<i>寝室号</i>
+            	<input type="text" class="stu_room" name="room_id">
+            </a> 
+        </form>
+        <a class="finish" id="next_btn">完成</a>
+    </section>
+	<script>
+		var next = document.getElementById('next_btn'),
+			form = document.getElementById('form');
+		next.addEventListener('click',function register(){
+			var data = gx.getFormData(form,['name','class_id','sysnum','building_id','room_id']);
+			var register =  gx.register.getRegisterInfo();
+			gx.register.deleteRegisterInfo();
+			gx.ajax({
+				method: 'POST',
+				url: '/api/account/modify',
+				data: Object.assign(data,register),
+				success: function(data){
+					location.href = '/';
+				},
+				error: function(err){
+					alert('修改信息失败');
+				}
+			})
+
+		})
+	</script>
+</body>
+</html>

@@ -1,0 +1,121 @@
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--  -->
+
+<mapper namespace="com.halfmoon.cloudmanager.dao.sql.check.signcheck.impl.SignDao">
+
+	<insert id="add" parameterType="com.halfmoon.cloudmanager.model.check.Sign">
+		<selectKey resultType="Integer" order="AFTER" keyProperty="id">
+			select LAST_INSERT_ID() as id
+		</selectKey>
+		insert into 
+		sign(sign_in_check_auto_id,single_sign_check_id,sign_in_check_id,
+		signed_times,is_open,is_face,name_list,longitude,latitude,open_time)
+		value (#{sign_in_check_auto_id},#{single_sign_check_id},#{sign_in_check_id},
+		#{signed_times},#{is_open},#{is_face},#{name_list},#{longitude},#{latitude},#{open_time})
+	</insert>
+	
+	<!-- 仅关闭自己这个检查的所有次辅助签到 -->
+	<update id="closeSelf">
+		update 
+		sign set is_open=0 ,open_time=null ,name_list=null 
+		where sign_in_check_auto_id=#{check_auto_id} and sign_in_check_id=#{check_id}
+	</update>
+	
+	<!-- 关闭整个检查的辅助签到 并且将开启时间和签到名单设为null -->
+	<update id="closeAll">
+		update 
+		sign set is_open=0 ,open_time=null ,name_list=null 
+		where sign_in_check_id=#{check_id} and single_sign_check_id=#{single_auto_id}
+	</update>
+	
+	<!-- 关闭自己的这次辅助签到  最正常的关闭 -->
+	<update id="closeSelfOnce">
+		update 
+		sign set is_open=0 ,open_time=null,name_list=null 
+		where single_sign_check_id=#{single_check_id} and sign_in_check_auto_id=#{check_auto_id}
+	</update>
+	
+	<select id="get" resultType="com.halfmoon.cloudmanager.model.check.Sign"> 
+		select * 
+		from sign 
+		where sign_in_check_auto_id=#{check_id} and single_sign_check_id=#{single_id}
+	</select>
+	
+	<update id="modify" parameterType="com.halfmoon.cloudmanager.model.check.Sign">
+		update 
+		sign set is_open=#{is_open},signed_times=#{signed_times},
+		is_face=#{is_face},longitude=#{longitude},latitude=${latitude},open_time=#{open_time},name_list=#{name_list}
+		where sign_in_check_auto_id=#{sign_in_check_auto_id} and single_sign_check_id=#{single_sign_check_id}
+	</update>
+	
+	<select id="getByBossOpen" parameterType="int" resultType="com.halfmoon.cloudmanager.model.check.Sign">
+		select * 
+		from sign 
+		where sign_in_check_auto_id=#{check_id} and sign_in_check_id=#{check_id} and is_open=1 
+	</select>
+	
+	<!-- 查询出辅助者开启的 -->
+	<select id="getByHelperOpen" parameterType="int" resultType="com.halfmoon.cloudmanager.model.check.Sign">
+		select * 
+		from sign 
+		where sign_in_check_auto_id=#{check_auto_id} and sign_in_check_id=#{check_id} and is_open=1
+	</select>
+	
+	<!-- 这次的检查是否开启 -->
+	<select id="getStatus" resultType="int">
+		select is_open 
+		from sign 
+		where single_sign_check_id=#{single_check_id} and sign_in_check_auto_id=#{check_auto_id}
+	</select>
+	
+	<!-- 整个检查是否有开启的 ， 默认为0 -->
+	<select id="getIs_open" resultType="int">
+		select IFNULL(MAX(is_open),0) 
+		from sign 
+		where sign_in_check_auto_id=#{check_auto_id} and  sign_in_check_id=#{check_id}
+	</select>
+	
+	<!-- 更新location -->
+	<update id="updateAddress">
+		update 
+		sign set longitude=#{longitude},latitude=${latitude} 
+		where sign_in_check_auto_id=#{check_auto_id} and single_sign_check_id=#{single_id}
+	</update>
+	
+	<select id="getSignBySingleIdAndOpen" parameterType="java.util.Map" resultType="com.halfmoon.cloudmanager.model.check.Sign">
+		select *
+		from sign as s
+		<where>
+			
+			<if test="single_id!=null">
+				s.single_sign_check_id=#{single_id}
+			</if>
+			<if test="auto_id != null">
+				and s.sign_in_check_auto_id=#{auto_id}
+			</if>
+			<if test="check_id != null">
+				and s.sign_in_check_id=#{check_id}
+			</if>
+			<if test="is_open != null">
+				and s.is_open=#{is_open}
+			</if>
+			
+		</where>
+		
+	</select>
+	
+	<delete id="deleteByCheckId">
+		delete
+		from sign
+		where sign_in_check_id=#{check_id}
+	</delete>
+	<!--  -->
+	<delete id="deleteByAutoId">
+		delete
+		from sign
+		where sign_in_check_auto_id=#{auto_id}
+	</delete>
+</mapper>
+

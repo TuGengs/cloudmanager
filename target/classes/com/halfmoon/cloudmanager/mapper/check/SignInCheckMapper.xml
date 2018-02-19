@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.halfmoon.cloudmanager.dao.sql.check.impl.SignInCheckDao">
+
+	<select id="get"
+			parameterType="int"
+			resultMap="signInCheckResultMap">
+			
+		SELECT * FROM sign_in_check WHERE id = #{id}
+			
+	</select>
+
+	<!-- 获取单次签到的所有详细签到人员列表 -->
+	<!-- 感觉这样写效率可能会有点低，先观察一会，以后再改吧 -->
+	<!-- 那些resultMap先暂时放在这个文件中，到时候会放到对应的mapper中，有些语句以后也换改动位置 -->
+	<select id="getAllDetailsOfSingleCheck"
+			parameterType="int"
+			resultMap="signInRecordResultMap">
+			
+		SELECT id, user_id, signed_times, is_here
+		FROM detailed_sign_in_check
+		WHERE single_sign_check_auto_id = #{single_sign_check_auto_id}
+		
+	</select>
+	
+	<!-- 调用存储过程 -->
+	<select id="getSingleChecksByCycle"
+			parameterType="map"
+			resultType="com.halfmoon.cloudmanager.model.check.SingleSignInCheck">
+			
+		CALL proc_get_single_check(#{sign_in_check_id}, #{cycle_time}, 'sign_in')
+	
+	</select>
+	
+	<select id="getRawResultData"
+			parameterType="map"
+			resultType="map">
+			
+		SELECT user.name, ds.is_here, ds.signed_times, ds.ought_sign_times, sc.create_time AS date
+		FROM detailed_sign_in_check AS ds
+		LEFT JOIN user ON ds.user_id = user.id
+		LEFT JOIN single_sign_in_check as sc ON sc.id = ds.single_sign_in_check_id
+		WHERE sc.sign_in_check_id = #{sign_in_check_id}
+		<if test="user_id != null">
+			and ds.user_id = #{user_id}
+		</if>
+			
+	</select>
+	
+	<resultMap id="signInRecordResultMap"
+			   type="com.halfmoon.cloudmanager.response.check.SignInRecord">
+			   
+		<id property="id" column="id"></id>
+
+		<association property="user"
+			   		 column="user_id"
+			   		 javaType="com.halfmoon.cloudmanager.response.user.UserInfo"
+			   		 select="com.halfmoon.cloudmanager.dao.sql.user.impl.UserDao.getUserInfo"></association>
+			   				
+	</resultMap>
+	
+	<resultMap id="signInCheckResultMap"
+			   type="com.halfmoon.cloudmanager.response.check.SignInCheckInfo">
+			   
+		<id property="id" column="id"></id>
+		
+		<association property="creator"
+			   		 column="creator_id"
+					 javaType="com.halfmoon.cloudmanager.response.user.UserInfo"
+					 select="com.halfmoon.cloudmanager.dao.sql.user.impl.UserDao.getUserInfo"></association>
+			   				
+	</resultMap>
+
+</mapper>

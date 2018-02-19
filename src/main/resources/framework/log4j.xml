@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+
+    <!-- Appenders -->
+    <appender name="console" class="org.apache.log4j.ConsoleAppender">
+        <param name="Target" value="System.out" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%-5p: %c - %m%n" />
+        </layout>
+    </appender>
+    
+    <appender name="logFile" class="org.apache.log4j.RollingFileAppender">
+    	<param name="File" value="/data/log/ssm.log" />
+    	<param name="Append" value="true" />       
+        <param name="MaxBackupIndex" value="10" />
+        <layout class="org.apache.log4j.PatternLayout">       
+            <param name="ConversionPattern" value="%p (%c:%L)- %m%n" />       
+        </layout>  
+    </appender>
+
+    <!-- 3rdparty Loggers -->
+    <logger name="org.springframework.core">
+        <level value="debug" />
+    </logger>
+
+    <logger name="org.springframework.beans">
+        <level value="debug" />
+    </logger>
+    
+    <logger name="org.springframework.context">
+        <level value="debug" />
+    </logger>
+
+    <logger name="org.springframework.web">
+        <level value="debug" />
+    </logger>
+
+    <logger name="org.mybatis">
+        <level value="debug" />
+    </logger>
+    
+    <logger name="com.halfmoon.cloudmanager">
+        <level value="debug" />
+    </logger>
+
+    <!-- Root Logger -->
+    <root>
+        <priority value="debug" />
+        <appender-ref ref="console" />
+        <appender-ref ref="logFile"/>
+    </root>
+    
+</log4j:configuration>

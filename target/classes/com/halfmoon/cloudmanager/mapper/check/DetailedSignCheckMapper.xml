@@ -1,0 +1,125 @@
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--  -->
+
+<mapper namespace="com.halfmoon.cloudmanager.dao.sql.check.signcheck.impl.DetailedSignCheckDao">
+
+	<insert id="add" parameterType="com.halfmoon.cloudmanager.model.check.DetailedSignInCheck">
+		<selectKey resultType="Integer" order="AFTER" keyProperty="id">
+			select LAST_INSERT_ID() as id
+		</selectKey>
+		insert into detailed_sign_in_check(single_sign_check_auto_id,user_id,user_name,
+		is_here,signed_times,sign_type,manager_id,ought_sign_times,sign_check_id,remark,icon_url)
+		value(#{single_sign_check_auto_id},#{user_id},#{user_name},#{is_here},
+		#{signed_times},#{sign_type},#{manager_id},#{ought_sign_times},#{sign_check_id},#{remark},#{icon_url})
+		
+	</insert>
+	<!-- 将应到次数加一 ，并将状态置为未到 -->
+	<update id="updateOughtTimes" parameterType="int">
+		update detailed_sign_in_check
+		<set> 
+			ought_sign_times=ought_sign_times+1,
+			is_here=(case when signed_times>0 then 1 else is_here end)
+		</set>
+		where single_sign_check_auto_id=#{single_check_id}
+	</update>
+	
+	<select id="is_Here" resultType="int">
+		select is_here from detailed_sign_in_check where single_sign_check_auto_id=#{single_id}
+		and user_id=#{user_id}
+	</select>
+	
+	<select id="getLackTimes" resultType="int">
+		select count(id) from detailed_sign_in_check 
+		where sign_check_id=#{check_id} and user_id=#{user_id} and is_here=0
+	</select>
+	
+	<select id="getOughtTimes" resultType="int">
+		select ought_sign_times from detailed_sign_in_check where single_sign_check_auto_id=#{single_id} and user_id=#{user_id}
+	</select>
+	
+	<update id="updateStatus">
+		update detailed_sign_in_check set signed_times=#{ought}, ought_sign_times=#{ought} ,is_here=#{status},remark=#{tip}
+		where single_sign_check_auto_id=#{single_check_id} and user_id=#{user_id}
+	</update>
+	
+	<update id="updateStatusWithoutOught">
+		update detailed_sign_in_check set is_here=#{status},remark=#{tip}
+		where single_sign_check_auto_id=#{single_check_id} and user_id=#{user_id}
+	</update>
+	
+	<update id="handleSign">
+		update detailed_sign_in_check set signed_times=signed_times+1,is_here=#{status} where single_sign_check_auto_id = #{single_id} and user_id=#{user_id}
+	</update>
+	
+	<insert id="saveList" parameterType="com.halfmoon.cloudmanager.model.check.DetailedSignInCheck">
+		<selectKey resultType="Integer" order="AFTER" keyProperty="id">
+			select LAST_INSERT_ID() as id
+		</selectKey>
+		insert into detailed_sign_in_check(single_sign_check_auto_id,user_id,user_name,
+		is_here,signed_times,sign_type,manager_id,ought_sign_times,sign_check_id,remark,icon_url)
+		values
+		<foreach collection="list" item="item" index="index" separator=",">
+		(#{item.single_sign_check_auto_id},#{item.user_id},#{item.user_name},#{item.is_here},
+		#{item.signed_times},#{item.sign_type},#{item.manager_id},#{item.ought_sign_times},#{item.sign_check_id},#{item.remark},#{item.icon_url})
+		</foreach>
+		
+	</insert>
+	<select id="getSingleLackTimes" resultType="int">
+		select ought_sign_times-signed_times from detailed_sign_in_check where single_sign_check_auto_id=#{single_id} and user_id=#{user_id}
+	</select>
+	
+	<delete id="deleteByCheckId">
+		delete
+		from detailed_sign_in_check
+		where sign_check_id=#{check_id}
+	</delete>
+	
+	<select id="getUserIdSortByLackTimes" resultType="com.halfmoon.cloudmanager.model.check.dto.LackTimes" >
+		
+		select user_id,sum(is_here=0) as times
+		from detailed_sign_in_check
+		where sign_check_id=#{check_id}
+		and user_id in 
+		<foreach collection="list" item="item" open="(" separator="," close=")">
+			#{item.user_id}
+		</foreach> 
+		group by user_id order by times desc
+	</select>
+	
+	
+	<select id="test" resultType="com.halfmoon.cloudmanager.model.check.dto.DetailInfo" >
+		select u.id as user_id,u.name as name,u.clazz as class_name,i.url as icon_url,d.is_here as is_here
+		from list_to_check l,user u,icon i,detailed_sign_in_check d
+		where l.check_id=#{check_id} and l.check_type=#{type} and l.user_id=u.id and u.id=i.user_id and u.id=d.user_id
+		
+	</select>
+	
+	<select id="getSingleIdByUserIdAndCheckId" resultType="int">
+		select single_sign_check_auto_id
+		from detailed_sign_in_check
+		where sign_check_id=#{check_id} and user_id=#{user_id}
+	</select>
+	
+	<delete id="deleteBySingleId" parameterType="int">
+		delete from detailed_sign_in_check
+		where single_sign_check_auto_id=#{single_id}
+	</delete>
+	
+	
+	<update id="saveSingleRemark">
+		update detailed_sign_in_check
+		set remark=#{remark}
+		where single_sign_check_auto_id=#{single_id} and user_id=#{user_id}
+	</update>
+	
+	<select id="getUserDetail" resultType="com.halfmoon.cloudmanager.model.check.dto.UserDetail">
+		
+		select u.class as class_name ,u.gender as gender,u.tel as tel,d.remark as remark,i.url as img_url
+		from user u left join icon i on u.id=i.user_id join detailed_sign_in_check d on d.user_id=u.id and d.single_sign_check_auto_id=#{single_id}
+		where u.id=#{user_id}
+		
+	</select>
+</mapper>
+

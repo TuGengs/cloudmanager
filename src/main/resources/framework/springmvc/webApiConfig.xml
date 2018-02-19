@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+
+	<import resource="springmvc-common.xml"/>
+	<context:component-scan base-package="com.halfmoon.cloudmanager.controller.api"/>
+
+	<!-- 配置拦截器 -->
+	<mvc:interceptors>
+	
+		<!-- 删除session中的验证码信息，防止二次利用 -->
+		<mvc:interceptor>
+			<mvc:mapping path="/account/register"/>
+			<bean class="com.halfmoon.cloudmanager.interceptor.auth.AuthInterceptor"></bean>
+		</mvc:interceptor>
+		<mvc:interceptor>
+			<mvc:mapping path="/account/reset/password"/>
+			<bean class="com.halfmoon.cloudmanager.interceptor.auth.AuthInterceptor"></bean>
+		</mvc:interceptor>
+		
+		<!-- 微信登录后把openid存入数据库，与该用户对应 -->
+		<mvc:interceptor>
+			<mvc:mapping path="/account/login"/>
+			<bean class="com.halfmoon.cloudmanager.interceptor.login.WechatLoginInterceptor"></bean>
+		</mvc:interceptor>
+		<!-- 退出登录后把与用户对应的openid删除 -->
+		<mvc:interceptor>
+			<mvc:mapping path="/account/logout"/>
+			<bean class="com.halfmoon.cloudmanager.interceptor.login.WechatLogoutInterceptor"></bean>
+		</mvc:interceptor>
+		
+	</mvc:interceptors>
+	
+	<!-- 配置图片验证码 -->
+	<bean id="pictureAuthcode" class="com.halfmoon.cloudmanager.util.authcode.PictureAuthcode">
+		<property name="FORMAT" value="jpg"></property>
+		<property name="EXPIRE_TIME" value="600"></property>
+	</bean>
+	
+	<!-- 配置短信验证码 -->
+	<bean id="smsAuthcode" class="com.halfmoon.cloudmanager.util.authcode.SmsAuthCode">
+		<property name="url" value="https://eco.taobao.com/router/rest"></property>
+		<property name="appkey" value="23652513"></property>
+		<property name="secret" value="3af8f4feebf0385bf3277ea71c77c0d4"></property>
+		<property name="signName" value="高校云考勤"></property>
+		<property name="templateCode" value="SMS_49355273"></property>
+		<property name="DIGIT" value="6"></property>
+		<property name="EXPIRE_TIME" value="600"></property>
+	</bean>
+	
+	<!-- 配置检查代码生成工具 -->
+	<bean id="randomCode" class="com.halfmoon.cloudmanager.util.randomcode.RandomCode">
+		<constructor-arg index="0" type="int">
+			<value>4</value>
+		</constructor-arg>
+	</bean>
+	
+	<!-- 由于这几个Check公用CheckCode，所以只能动态生成对应的Dao类，相当于一个映射 -->
+	<bean id="signInCheck"
+		  class="com.halfmoon.cloudmanager.dao.sql.check.impl.SignInCheckDao"></bean>
+		  
+	<bean id="gradeCheck"
+		  class="com.halfmoon.cloudmanager.dao.sql.check.impl.GradeCheckDao"></bean>
+		  
+	<!-- 文件上传配置 -->
+	<bean id="multipartResolver"
+		  class="org.springframework.web.multipart.support.StandardServletMultipartResolver"></bean>
+
+</beans>

@@ -1,0 +1,227 @@
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--  -->
+
+<mapper namespace="com.halfmoon.cloudmanager.dao.sql.check.signcheck.impl.ListCheckDao">
+
+	<insert id="add" parameterType="com.halfmoon.cloudmanager.model.check.ListCheck">
+		insert into list_to_check(check_id,user_id,auto_id,check_type)value
+		(#{check_id},#{user_id},#{auto_id},#{check_type})
+	</insert>
+	
+	<update id="updateAutoId" >
+		update list_to_check set auto_id=#{check_auto_id} 
+		where check_type=#{type} and check_id=#{check_id}
+		and user_id in 
+		<foreach collection="list" item="id" open="(" separator="," close=")">#{id}</foreach> 
+	</update>
+	
+	<select id="getAvilList" parameterType="int" resultType="int">
+		select user_id from list_to_check where check_type=#{type} and check_id=#{check_id} and auto_id=#{check_id}
+	</select>
+	
+	<select id="getAllIds" resultType="com.halfmoon.cloudmanager.model.check.dto.UInfo">
+	
+		select u.id as user_id,u.sysnum as sysnum,u.name as name,i.url as icon_url,u.class as class_name	
+		from
+		user u right join 
+		(select user_id from list_to_check l
+		<where>
+			<if test="type!=null">
+				l.check_type=#{type}
+			</if>
+			<if test="check_id!=null">
+				and l.check_id=#{check_id}
+			</if>
+			<if test="auto_id!=null">
+				and l.auto_id=#{auto_id}
+			</if>
+		</where>)
+		as l on l.user_id = u.id
+		left join icon i on i.user_id=u.id
+		
+		<if test="single_id!=null">
+			left join detailed_sign_in_check d
+			on d.single_sign_check_auto_id=#{single_id} and d.user_id=u.id
+		</if>
+		<if test="order==1">
+			order by u.sysnum
+		</if>
+		<if test="order==2">
+			order by u.name
+		</if>
+		<if test="order==3">
+			order by d.is_here
+		</if>
+		<if test="order==4">
+			order by u.id
+		</if>
+		<!-- select u.id as user_id,u.name as name,i.url as icon_url,u.class as class_name
+		from user u,icon i
+		<if test="single_id!=null">
+			,detailed_sign_check d
+		</if>
+		where 
+		u.icon_id=i.id
+		<if test="single_id!=null">
+			and d.single_sign_check_auto_id=#{single_id} and d.user_id=u.id
+		</if>
+		and u.id in
+		(select user_id 
+		from list_to_check 
+		<where>
+			<if test="type!=null">
+				check_type=#{type}
+			</if>
+			<if test="check_id!=null">
+				and check_id=#{check_id}
+			</if>
+			<if test="auto_id!=null">
+				and auto_id=#{auto_id}
+			</if>
+		</where>
+		)
+		<if test="order==1">
+			order by u.id
+		</if>
+		<if test="order==2">
+			order by u.name
+		</if>
+		<if test="order==3">
+			order by d.is_here
+		</if> -->
+	</select>
+	
+	<select id="getChecksBySys" parameterType="int" resultType="com.halfmoon.cloudmanager.model.check.ListCheck">
+		select * from list_to_check where user_id=#{user_id}
+	</select>
+	<select id="getByAutoId" resultType="com.halfmoon.cloudmanager.model.check.dto.UUInfo">
+		select id as user_id ,name as name,sysnum as sysnum
+		from user where id in (
+		select user_id 
+		from list_to_check
+		where check_type=#{type} and check_id=#{check_id} and auto_id=#{check_auto_id})
+	</select>
+	
+	<delete id="deleteUserList">
+		delete
+		from list_to_check 
+		where check_type=#{type} and check_id=#{check_id} 
+		and user_id in
+		<foreach collection="array" item="id" open="(" separator="," close=")">
+			#{id}
+		</foreach> 
+	</delete>
+	
+	
+	
+	<select id="getCount" resultType="int">
+		select count(check_id) from list_to_check 
+		where check_type=#{type} and check_id=#{check_id}
+		and auto_id=#{check_auto_id}
+	</select>
+	
+	<!-- 对应检查信息 -->
+	<select id="getSignInfo" resultType="com.halfmoon.cloudmanager.model.check.ListCheck">
+		select * 
+		from list_to_check 
+		where user_id=#{user_id} 
+	</select>
+	
+	<!-- 查看这个人是否已经存进这个表里 对应check_id 不能加auto_id -->
+	<select id="isExists" parameterType="com.halfmoon.cloudmanager.model.check.ListCheck" resultType="int">
+		select count(user_id) 
+		from list_to_check 
+		where check_type=#{check_type} and check_id=#{check_id}
+		and user_id=#{user_id}
+	</select>
+	
+	<!-- 把一个检查的对应信息删除 -->
+	<delete id="deleteByCheckId">
+		delete
+		from list_to_check
+		where check_id=#{check_id} and check_type=#{type}
+	</delete>
+	
+	<!-- 将auto_id更新为check_id -->
+	<update id="updateAutoIdForCheckId">
+		update
+		list_to_check
+		set auto_id = check_id
+		where check_type=#{type} and check_id=#{check_id} and auto_id=#{auto_id}
+	</update>
+	
+	<select id="getUserByView" resultType="com.halfmoon.cloudmanager.model.check.dto.UUInfo">
+	
+		select u.sysnum as user_id,u.name as name,u.class as class_name,IFNULL(d.times,0) as lack_times
+		from user as u 
+		inner join
+		(select user_id,sum(is_here=0) as times
+		from detailed_sign_in_check
+		where sign_check_id=#{check_id}
+		group by user_id) as d
+		on u.id = d.user_id
+		<if test="sort_id>-1">
+			order by
+		</if>
+		 
+		<if test="sort_id==0">
+			class_name
+		</if>
+		<if test="sort_id==1">
+			user_id
+		</if>
+		<if test="sort_id==2">
+			name
+		</if>
+		<if test="sort_id==3">
+			lack_times		
+		</if>
+	</select>
+	
+	<select id="getList" resultType="com.halfmoon.cloudmanager.model.check.dto.UUInfo">
+		select u.id as user_id,u.sysnum as sysnum,u.name as name,u.class as class_name
+		from user as u
+		where u.id in 
+		(select user_id 
+		from list_to_check
+		<where>
+			<if test="type!=null">
+				check_type=#{type}
+			</if>
+			<if test="check_id!=null">
+				and check_id=#{check_id}
+			</if>
+			<if test="auto_id!=null">
+				and auto_id=#{auto_id}
+			</if>
+		</where>)
+	</select>
+	
+	
+	<!-- 
+	*******************************************************************************************
+	以上为XU代码
+	*******************************************************************************************
+	以下为LITAO代码
+	*******************************************************************************************
+	 -->
+	
+	
+<!-- 
+ * @author LITAO
+ * @time 下午4:38:52  2017年3月11日
+ * @修改 新添了一个sql
+ -->
+ 	<select id="getPeople" 
+			resultType="com.halfmoon.cloudmanager.model.check.ListCheck" >
+	 	select user_id from list_to_check 
+	 	where 
+	 	check_id = #{check_id}<!-- 这里切记不要是check_id，应该是auto_id -->
+	</select>
+	
+	
+	
+</mapper>
+

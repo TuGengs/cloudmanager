@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	
+<!-- 
+ * @author LITAO
+ * @time 下午4:38:52  2017年3月11日
+ * @修改 修改了三处导入的包路径
+ -->
+ 
+	
+<mapper namespace="com.halfmoon.cloudmanager.dao.sql.check.gradecheck.impl.DetailedGradeCheckDao">
+
+	<resultMap type="com.halfmoon.cloudmanager.model.check.DetailedGradeCheck"  id="DetailedGradeCheck" >
+		<result property="grading_items" column="grading_items"  
+				typeHandler="com.halfmoon.cloudmanager.dao.sql.JsonTypeHandler"/>
+	</resultMap>
+
+
+
+    <!-- 
+		这个insert是在创建single_grade_check的时候调用生成记录的 
+	-->
+	<insert id="addUsers"  
+			parameterType="com.halfmoon.cloudmanager.model.check.DetailedGradeCheck">
+		insert into detailed_grade_check 
+		(single_grade_check_id, user_id)
+		values
+		(#{single_grade_check_id}, #{user_id})
+	</insert>
+
+
+	<!-- 
+		这个主要是在实施扣分的时候调用的，直接更新已经有的记录 
+	-->
+	<update id="updateGrades" parameterType="com.halfmoon.cloudmanager.model.check.DetailedGradeCheck">
+		update detailed_grade_check 
+		set
+		single_grade_check_id = #{single_grade_check_id}
+		where
+		id = #{id}
+	</update>
+
+
+	<!--
+		1.向greading_items中添加数据的时候只能是update，
+		      而不是insert（因为grading_items是存在的，要修改的是里面的json数据） 
+		2.删除某个人的扣分项，只能以update的形式 
+		————所以在这里，共用一个update————
+		数据模型：[1, 2, 3]，里面存的是grading_items表中的自增id
+	-->
+	<update id="updateItems" parameterType="com.halfmoon.cloudmanager.model.check.DetailedGradeCheck">
+		update detailed_grade_check 
+		set 
+		grading_items = (#{grading_items, jdbcType=CHAR})
+		where 
+		id = #{id} 
+	</update>
+	
+	<!-- TEST -->	
+	<insert id="testAddItems" 
+			parameterType="com.halfmoon.cloudmanager.model.check.DetailedGradeCheck">
+		insert into detailed_grade_check(grading_items) 
+		values 
+		(#{grading_items, jdbcType=CHAR})
+	</insert>
+	<!-- typeHandler=com.halfmoon.cloudmanager.util.JsonTypeHandler.JsonTypeHandler -->
+	
+	<!-- 
+		对应着上面的updateItems使用
+		查询某人有哪些扣分项，获得json数据，需要在java中解析
+	-->
+	<select id="searchItems"  parameterType="com.halfmoon.cloudmanager.model.check.DetailedGradeCheck"
+			resultType="com.google.gson.JsonArray">
+			<!-- 哈哈哈哈！！！！这里可以直接写JsonArray，简直精彩 -->
+			<!-- 前提是在mapper-config中配置好typeHandlers -->
+		select grading_items
+		from detailed_grade_check 
+		where 
+		id = #{id}
+	</select>
+
+
+	<delete id="deleteRecord" parameterType="com.halfmoon.cloudmanager.model.check.DetailedGradeCheck">
+		delete from detailed_grade_check 
+		where
+		single_grade_check_id = #{single_grade_check_id}
+	</delete>
+
+	<select id="getLastInsertId">
+		select last_insert_id()
+	</select>
+	
+	<select id="showDetailedGradeCheck" resultType="com.halfmoon.cloudmanager.model.check.DetailedGradeCheck" >
+		select * 
+		from detailed_grade_check
+		where 
+		single_grade_check_id = #{check_id}
+		<!-- 这些字段名，讲道理，很容易混啊。
+			这个check_id实际上是single_grade_check表上的自增id
+		 -->
+		
+	</select>
+
+</mapper>

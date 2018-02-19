@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper
+	namespace="com.halfmoon.cloudmanager.dao.sql.school.impl.SchoolDao">
+	
+	<select id="get"
+			parameterType="int"
+			resultType="com.halfmoon.cloudmanager.model.school.School">
+	
+		SELECT id, name, crawled
+		FROM school
+		WHERE id = #{id}
+			
+	</select>
+	
+	<select id="getSchoolsNearby"
+			parameterType="map"
+			resultType="com.halfmoon.cloudmanager.model.school.School">
+			
+		SELECT id, name, crawled
+		FROM school
+		WHERE longitude <![CDATA[<]]> #{longitude}+0.1 AND longitude <![CDATA[>]]> #{longitude}-0.1
+		AND latitude <![CDATA[<]]> #{latitude}+0.1 AND latitude <![CDATA[>]]> #{latitude}-0.1
+		ORDER BY ABS(longitude-#{longitude}) + ABS(latitude-#{latitude})
+		LIMIT 10;
+	
+	</select>
+	
+	<select id="getSchoolsByKeyword"
+			parameterType="String"
+			resultType="com.halfmoon.cloudmanager.model.school.School">
+	
+		SELECT id, name, crawled
+		FROM school
+		WHERE name LIKE "%"#{keyword}"%"
+		LIMIT 10;
+			
+	</select>
+	
+</mapper>

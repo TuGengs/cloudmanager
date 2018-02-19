@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper
+	namespace="com.halfmoon.cloudmanager.dao.sql.user.photo.impl.PhotoDao">
+	
+	<insert id="add"
+			parameterType="com.halfmoon.cloudmanager.model.user.photo.Photo"
+			useGeneratedKeys="true"
+			keyProperty="id">
+	
+		INSERT INTO photo (url, user_id) VALUES (#{url}, #{user_id})
+	
+	</insert>
+	
+	<select id="get"
+			parameterType="int"
+			resultType="com.halfmoon.cloudmanager.model.user.photo.Photo">
+			
+		SELECT id, url
+		FROM photo
+		WHERE user_id = #{id}
+		ORDER BY id DESC
+		LIMIT 1
+		
+	</select>
+	
+</mapper>

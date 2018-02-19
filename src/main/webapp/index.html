@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+<script type="text/javascript" src="jquery-1.12.0.min.js"></script>
+</head>
+<body>
+	<h1>注册</h1>
+	<form action="api/account/EASRegister" method="POST">
+		手机号：<input id="phone" type="text" name="tel"><br>
+		验证码：<input id="pic-code" type="text"><img src="api/auth/captcha/pic"><input type="button" id="pic-verify" value="验证"><br>
+		短信验证码：<input id="sms-code" type="text"><a href="#" id="smscode">发送验证码</a><input id="sms-verify" type="button" value="验证"><br>
+		密码：<input type="password" name="password"><br>
+		教务系统账号：<input type="text" name="sysnum"><br>
+		教务系统密码：<input type="password" name="eas_password"><br>
+		<input type="submit" value="注册">
+	</form>
+	<form action="api/account/modify/profile" method="POST">
+		学校：<input type="text" name="school_id"><br>
+		院系：<input type="text" name="academy"><br>
+		班级：<input type="text" name="class"><br>
+		楼栋：<input type="text" name="building"><br>
+		寝室：<input type="text" name="room"><br>
+		姓名：<input type="text" name="name"><br>
+		学号：<input type="text" name="sysnum"><br>
+		<input type="submit" value="修改">
+	</form><br>
+	<h1>登录</h1>
+	<form action="api/account/login" method="POST">
+		手机号：<input name="tel" type="text"><br>
+		密码：<input name="password" type="password"><br>
+		<input type="submit" value="登录">
+	</form>
+	
+	<form action="api/account/uploadIcon" method="POST" enctype="multipart/form-data">
+		头像：<input name="icon" type="file"><br>
+		<input type="submit" value="提交">
+	</form>
+
+</body>
+<script type="text/javascript">
+	var smscode = document.getElementById("smscode");
+	var phone = document.getElementById("phone");
+	var smscodeInput = document.getElementById("sms-code");
+	var smsverify = document.getElementById("sms-verify");
+	smscode.onclick = function() {
+		$.post({
+			url : "api/auth/captcha/sms",
+			data : {tel : phone.value},
+			success : function(result) {
+				if(result.success) {
+					alert("短信已发送...");
+				}
+				else {
+					alert(result.errorMessage);
+				}
+			}
+		});
+	};
+	smsverify.onclick = function() {
+		$.post({
+			url : "api/auth/captcha/sms/verify",
+			data : {userInput : smscodeInput.value},
+			success : function(result) {
+				alert(result.success + "\n" + result.errorMessage);
+			}
+		})
+	}
+	var piccode = document.getElementById("pic-code");
+	var picverify = document.getElementById("pic-verify");
+	picverify.onclick = function() {
+		$.post({
+			url : "api/auth/captcha/pic/verify",
+			data : {userInput : piccode.value},
+			success : function(result) {
+				alert(result.success + "\n" + result.errorMessage);
+			}
+		});
+	};
+	
+</script>
+</html>

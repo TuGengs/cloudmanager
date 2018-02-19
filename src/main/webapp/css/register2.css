@@ -1,0 +1,135 @@
+@charset "utf-8";
+/* CSS Document */
+.top {
+	width: 100%;
+	height: 60px;
+	line-height: 60px;
+	background-color: #393a3f;
+	color:#fff;
+	text-align: center;
+	font-size: 1.6rem;
+	letter-spacing:1rem;
+	font-weight:bold;
+}
+header {
+	height:40px;
+	line-height:40px;
+	width:100%;
+	color:#a5d8e0;
+	font-weight:bold;
+	font-size:1.6rem;
+	text-align:center;
+	letter-spacing:1rem;
+	border-bottom: 1px solid #d5d5d5;
+}
+.user{
+	padding-top:100px;
+	width:266px;
+	height:150px;
+	margin:0 auto;
+	}
+.user div{
+	width:110px;
+	height:150px;
+	text-align:center;
+	color:#aeaeae;
+	cursor:pointer;
+		}
+.user div i{
+	font-family:'iconfont';
+	font-size:70px;
+	line-height:140px;
+	}
+.student{
+	float:left;
+	}
+div.student i{
+	font-size:85px;
+	}
+.school{
+	position:relative;
+	}
+.near-schools{
+	position:absolute;
+	}
+.teacher{
+	float:right;
+	}
+.user div p{
+	font-size:1.5rem;
+	font-weight:bold;
+	margin-top:-15px;
+	}
+.register2_box{ 
+	width:100%;
+	padding:120px 56px;
+	}
+
+.register2_form i{
+	height:100%;
+	display:inline-block;
+	}
+.register2_form input{
+	display:inline-block;
+	margin-left: 10%;
+	width: 70%;
+	height:24px;
+	line-height:24px;
+	color:#333;
+	}
+.register2_form input[type="text"] {
+	border:none;
+}
+.register2_form div.school{
+	display:block;
+	width:100%;
+	height:30px;
+	line-height:30px;
+	border-bottom:1px solid #a5d8e0;
+	font-size:1.5rem;
+	margin-bottom:40px;
+	}
+.register2_box a.next{
+	display:block;
+	width:inherit;
+	height:30px;
+	line-height:30px;
+	background-color:#a5d8e0;
+	border-radius:10px;
+	text-align:center;
+	font-size:1.6rem;
+	margin-top: -35%;
+	cursor:point;
+	color:#fff;
+	font-weight:bold;
+	letter-spacing:1rem;
+}
+
+.school-list-container {
+	display: block;
+	visibility: hidden;
+	position: relative;
+	padding: 5px 0;
+	width: inherit;
+	top: -35px;
+	line-height:30px;
+	font-size:1.5rem;
+	z-index: 999;
+	height: 200px;
+	overflow-y: auto;
+	border: 1px solid #d0d0d0;
+	border-radius: 10px 0 0px 10px;
+	background-color: #fbfbfb;
+	box-shadow: 5px 5px 15px rgba(127, 127, 127, 0.5);
+} .school-list-container::-webkit-scrollbar {
+	width: 10px;
+} .school-list-container::-webkit-scrollbar-track {
+	background-color: #d9d9d9;
+} .school-list-container::-webkit-scrollbar-thumb {
+	background-color: #a9a9a9;
+	border-radius: 10px;
+}
+
+.school-list-container li {
+	padding: 0 10px;
+}

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	
+<!-- 
+ * @author LITAO
+ * @time 下午4:38:52  2017年3月11日
+ * @修改 在原有代码上新添了我自己的sql
+ -->
+ 
+<mapper namespace="com.halfmoon.cloudmanager.dao.sql.check.gradecheck.impl.GradingItemDao">
+	<resultMap type="com.halfmoon.cloudmanager.model.check.GradingItem" 
+			id="GradingItem">
+		<id column="id" property="id" />
+		<result column="grade_check_id" property="grade_check_id" />
+		<result column="name" property="name" />
+		<result column="grades" property="score" />
+	</resultMap>             
+             
+             
+             
+             
+	<!-- 添加新的扣分项 -->
+	<insert id="addItem" parameterType="com.halfmoon.cloudmanager.model.check.GradingItem">
+		insert into grading_item
+		(grade_check_id, name, grades)
+		values
+		(#{grade_check_id}, #{name}, #{grades})
+	</insert>
+	
+	
+	<!-- 通过id删除 -->
+	<delete id="deleteItemById" parameterType="com.halfmoon.cloudmanager.model.check.GradingItem">
+		delete from grading_item
+		where 
+		id = #{id}
+	</delete>	
+	
+	
+	<!-- 查找auto_id -->
+	<select id="getItemId" parameterType="com.halfmoon.cloudmanager.model.check.GradingItem">
+		select id from grading_item
+		where
+		grade_check_id = #{grade_check_id}
+	</select>
+	
+	
+	<!-- 查找三项出来：id，name，grades -->
+	<select id="getItem"  parameterType="com.halfmoon.cloudmanager.model.check.GradingItem" 
+			resultMap="GradingItem">
+		select id, name, grades from grading_item
+		where
+		grade_check_id = #{grade_check_id}
+	</select>
+	
+	
+	<!-- 
+		通过id更新item
+		传进来的id作为查询条件，其他作为修改条件 
+	-->
+	<update id="updateItem" parameterType="com.halfmoon.cloudmanager.model.check.GradingItem">
+		update grading_item set name = #{name}, grades = #{grades} where id = #{id}
+	</update>
+		
+</mapper>

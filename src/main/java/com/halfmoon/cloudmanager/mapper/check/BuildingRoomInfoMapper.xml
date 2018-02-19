@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	
+<!-- 
+ @author LITAO
+ @time 下午4:38:52  2017年3月11日
+ @修改 改了导入的包路径
+ -->
+ 
+	
+<mapper namespace="com.halfmoon.cloudmanager.dao.sql.check.gradecheck.impl.BuildingRoomInfoDao">
+
+	<resultMap type="com.halfmoon.cloudmanager.response.gradecheck.BuildingRoomInfo" id="BuildingRoomInfo">
+		<result column="id" property="id" />
+		<result column="building_name" property="building_name" />
+		<result column="room_name" property="room_name" />
+		<result column="name" property="name" />
+	</resultMap>
+	
+	<select id="getInfo"  resultMap="BuildingRoomInfo">
+		select  name,id from user
+		where
+   	  	building_name like #{building_name} and room_name like #{room_name}
+	</select>
+	
+	<select id="getBuilding" resultType="String">
+		select distinct building_name from user
+		where
+		id in
+		<foreach collection="list" item="param"  index="index"  open="("  close=")" separator=",">  
+   	  	#{param}
+		</foreach>  
+	</select>
+	
+	<select id="getRoom" resultType="String">
+		select distinct room_name from user
+		where
+		building_name =  #{building_name}
+	</select>
+</mapper>

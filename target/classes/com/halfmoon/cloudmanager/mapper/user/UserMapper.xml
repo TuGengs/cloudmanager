@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.halfmoon.cloudmanager.dao.sql.user.impl.UserDao">
+
+	<!-- 添加新用户 -->
+	<insert id="add"
+			useGeneratedKeys="true"
+			keyProperty="id"
+			parameterType="com.halfmoon.cloudmanager.model.user.User">
+			
+		INSERT INTO user (tel, hashed_password, name, academy, class, 
+		sysnum, building, room, school_id, is_teacher, openid)
+		VALUES (#{tel}, #{password}, #{name}, #{academy}, #{clazz}, #{sysnum},
+		#{building}, #{room}, #{school_id}, #{is_teacher}, #{openid})
+		
+	</insert>
+	
+	<update id="registerWithData"
+			parameterType="com.halfmoon.cloudmanager.model.user.User">
+		
+		UPDATE user
+		SET tel = #{tel}, hashed_password = #{password}
+		WHERE sysnum = #{sysnum};
+		<!-- 只有老师才需要添加课程 -->
+		<if test="is_teacher == 1">
+			CALL proc_add_lecture(#{sysnum});
+		</if>
+		
+	</update>
+	<!-- 获取登录成功后的用户信息 -->
+	<select id="getLoggedUser"
+			parameterType="map"
+			resultType="com.halfmoon.cloudmanager.response.user.LoggedUser">
+			
+		SELECT user.id, user.name, school.name AS school, icon.url AS icon_url
+		FROM user
+		LEFT JOIN icon ON user.icon_id = icon.id
+		LEFT JOIN school ON user.school_id = school.id
+		<choose>
+			<when test="id != null">
+				WHERE user.id = #{id}
+			</when>
+			<when test="openid != null">
+				WHERE user.openid = #{openid}
+			</when>
+			<otherwise>
+				WHERE user.tel=#{tel} AND user.hashed_password = #{hashed_password}
+			</otherwise>
+		</choose>
+		LIMIT 1
+		
+	</select>
+	
+	<!-- 修改用户密码 -->
+	<update id="resetPassword"
+			parameterType="map">
+			
+		UPDATE user 
+		SET hashed_password = #{hashed_password}
+		WHERE tel = #{tel}
+		
+		
+	</update>
+	
+	<!-- 修改用户信息 -->
+	<update id="modify"
+			parameterType="com.halfmoon.cloudmanager.model.user.User">
+			
+		UPDATE user
+		SET academy = #{academy}, name = #{name}, 
+		class = #{clazz}, sysnum = #{sysnum},
+		building = #{building}, room = #{room}
+		WHERE id = #{id}
+			
+	</update>
+	
+	<select id="getUserInfo"
+			parameterType="int"
+			resultMap="userInfoResultMap">
+			
+		SELECT user.id, user.name, gender, is_teacher, school_id, academy, class AS clazz, sysnum, building, room, icon.url AS icon_url
+		FROM user
+		LEFT JOIN icon ON user.icon_id = icon.id
+		WHERE user.id = #{id}
+		
+	</select>
+	
+	<update id="relateWithIcon"
+			parameterType="map">
+			
+		UPDATE user
+		SET icon_id = #{icon_id}
+		WHERE id = #{id}
+	
+	</update>
+	
+	<update id="relateWithPhoto"
+			parameterType="map">
+			
+		UPDATE user
+		SET photo_id = #{photo_id}
+		WHERE id = #{id}	
+		
+	</update>
+	
+	<!-- 绑定微信openid -->
+	<update id="relateWithOpenid"
+			parameterType="map">
+		
+		UPDATE user
+		SET openid = #{openid}
+		WHERE id = #{id}
+	
+	</update>
+	
+	<!-- 解绑openid -->
+	<update id="removeOpenid"
+			parameterType="int">
+			
+		UPDATE user
+		SET openid = ""
+		WHERE id = #{id}
+	
+	</update>
+	
+	<select id="checkoutIfTelHadBeenUsed"
+			parameterType="String"
+			resultType="int">
+			
+		SELECT 1
+		FROM user
+		WHERE tel = #{tel}
+		LIMIT 1
+			
+	</select>
+	
+	<resultMap id="userInfoResultMap"
+			   type="com.halfmoon.cloudmanager.response.user.UserInfo">
+			   
+		<id column="id" property="id"></id>
+		
+		<association property="school"
+					 column="school_id"
+					 javaType="com.halfmoon.cloudmanager.model.school.School"
+					 select="com.halfmoon.cloudmanager.dao.sql.school.impl.SchoolDao.get"></association>
+
+	</resultMap>
+	
+	<!-- 姓名班级信息 -->
+	<select id="getUserDList" resultType="com.halfmoon.cloudmanager.model.check.dto.UInfo">
+	
+		select name as name,class as class_name from user where id=#{id} 
+	</select>
+	
+	<!-- id,name,icon,clazz -->
+	<select id="getUserIcon"  resultType="com.halfmoon.cloudmanager.model.check.dto.UInfo">
+	
+		select u.id as user_id,u.name as name,i.url as icon_url,class as class_name
+		from user u,icon i 
+		where u.icon_id=i.id and u.id=#{id}
+	</select>
+	
+
+	
+	<!-- 获取多人的name -->
+	<select id="getUserName" resultType="String">
+		select name from user where id in 
+		<foreach collection="list" item="id" open="(" separator="," close=")">#{id}</foreach>
+	</select>
+	
+	<!-- 通过tel获取信息 -->
+	<select id="getUserInfoByTel" resultType="com.halfmoon.cloudmanager.model.check.dto.UInfo">
+		select name as name ,id as user_id from user where tel like #{tel}
+	</select>
+	
+	<!-- name -->
+	<select id="getName" resultType="String">
+		select name from user where id=#{user_id}
+	</select>
+	
+	<!-- 通过list-id进行排序 -->
+	<select id="getUserInfoByStatus" resultType="com.halfmoon.cloudmanager.model.check.dto.UInfo">
+	
+		select u.id as user_id,u.name as name,i.url as icon_url,u.class as class_name
+		from user u,icon i,detailed_sign_check d
+		where u.icon_id=i.id and d.user_id=u.id and d.single_sign_check_auto_id=#{single_id}
+		and u.id in
+		<foreach collection="list" item="id" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+		 order by d.is_here
+	</select>
+	
+	<select id="getUserInfoBySys" resultType="com.halfmoon.cloudmanager.model.check.dto.UInfo">
+	
+		select u.id as user_id,u.name as name,i.url as icon_url,u.class as class_name 
+		from user u,icon i
+		where u.icon_id=i.id 
+		and u.id in
+		<foreach collection="list" item="id" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+		 order by u.id
+	</select>
+	
+	<select id="getUserInfoByName" resultType="com.halfmoon.cloudmanager.model.check.dto.UInfo">
+	
+		select u.id as user_id,u.name as name,i.url as icon_url,u.class as class_name
+		from user u,icon i
+		where u.icon_id=i.id
+		and u.id in
+		<foreach collection="list" item="id" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+		 order by u.name
+	</select>
+	
+	<select id="getUserInfoWithoutSort" resultType="com.halfmoon.cloudmanager.model.check.dto.UInfo">
+	
+		select u.id as user_id,u.name as name,i.url as icon_url,u.class as class_name
+		from user u,icon i
+		where u.icon_id=i.id
+		and u.id in
+		<foreach collection="list" item="id" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</select>
+</mapper>

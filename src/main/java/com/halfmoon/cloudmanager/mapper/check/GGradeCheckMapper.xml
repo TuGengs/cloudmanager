@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper
+	namespace="com.halfmoon.cloudmanager.dao.sql.check.gradecheck.impl.GGradeCheckDao">
+		 
+	 <resultMap type="com.halfmoon.cloudmanager.model.check.GradeCheck" id="GradeCheck">
+		<id column="id" property="id" />
+		<result column="check_id" property="check_id" />
+		<result column="name" property="name" />
+		<result column="creator_id" property="creator_id" />
+		<result column="create_time" property="create_time" />
+		<result column="checker_type" property="checker_type" />
+		<result column="emp_id" property="emp_id" />
+	</resultMap>
+	
+	
+	
+	<!-- 首次添加数据，默认id与check_id是相同的 -->
+	<!-- 运行过程中必须要加锁，使得在获取当前id最大值的时候不会受到影响 -->
+	<!-- 在这里我用了@Transactional标签，在一个方法中先后调用addNewRecord和updateCheckId方法-->
+	<insert id="addNewRecord" parameterType="com.halfmoon.cloudmanager.model.check.GradeCheck">
+		<!--  <include refid="start_transaction"></include>-->
+		insert into grade_check
+		(creator_id, name, create_time, checker_type) 
+		values
+		(#{creator_id}, #{name}, now(), 0)
+	  	<!--  <include refid="update_checkId"></include>-->
+		<!--  <include refid="commit"></include>-->
+	</insert>
+	<!-- sql语句段，涉及到check_id的事务处理 -->
+	<sql id="start_transaction">
+		start transaction
+	</sql>
+	<sql id="commit">
+		commit
+	</sql>
+	<sql id="update_checkId">
+		update grade_check set check_id = id where id = last_insert_id()
+	</sql>
+	<update id="updateCheckId">update grade_check set check_id = id where id = last_insert_id()</update>
+	
+	
+	<!-- 
+		非首次创建数据，
+		check_id是固定的，需要传参进来，id是不同的 
+		还需要传入emp_id
+	-->
+	<insert id="addEmpRecord" parameterType="com.halfmoon.cloudmanager.model.check.GradeCheck">
+		insert into grade_check
+			(check_id, name, creator_id,
+			create_time, checker_type, emp_id) 
+		values
+			(#{check_id}, #{name}, #{creator_id}, 
+			now(), 1, #{emp_id})
+	</insert>
+	
+	
+	
+	<!-- 方法弃用
+		查询自己所管理的人 
+	<select id="searchPersons" resultType="String"
+		parameterType="com.halfmoon.cloudmanager.model.check.GradeCheck">
+		select person_list from grade_check
+		where 
+		creator_id = #{creator_id} 
+		and
+		emp_id = #{emp_id}  
+	</select>-->
+	
+	<!--
+	parameterType="com.halfmoon.cloudmanager.model.gradecheck.GradeCheck" 
+		按照dao的要求，从数据库中获取id, check_id, name，打包成json发送给前端~~ 
+	 -->
+	<select id="getMainInfo" parameterType="com.halfmoon.cloudmanager.model.check.GradeCheck"  
+			resultMap="GradeCheck">
+		select id, check_id, name from grade_check 
+		where 
+		id in
+		<foreach collection="list" item="param"  open="(" close=")" separator=",">  
+   	  	#{param}
+		</foreach>   
+	
+	</select>
+
+	
+	
+	<!--
+		得到创建这条记录时的时间
+		这里用的返回值类型为date，不知道有没有问题~~
+		尚未测试 
+	 -->
+	<select id="getCreateTime" parameterType="com.halfmoon.cloudmanager.model.check.GradeCheck"
+			resultType="Date">
+		select create_time 
+		from grade_check
+		where id = #{id}
+	</select>
+	
+	<!--
+		得到当前最后一次获得的id（可能拿去当做check_id） 
+	 -->
+	<select id="getLastInsertId" resultType="int">
+		select last_insert_id()
+	</select>
+	 
+	 
+	 
+	 
+	
+</mapper>

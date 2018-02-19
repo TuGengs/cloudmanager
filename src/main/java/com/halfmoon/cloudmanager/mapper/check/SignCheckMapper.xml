@@ -1,0 +1,98 @@
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.halfmoon.cloudmanager.dao.sql.check.signcheck.impl.SignCheckDao">
+	
+	
+	<insert id="add" parameterType="com.halfmoon.cloudmanager.model.check.SignInCheck">
+		<selectKey resultType="Integer" order="AFTER" keyProperty="id">
+			select LAST_INSERT_ID() as id
+		</selectKey>
+		insert into sign_in_check
+		(check_id,name,end_time,creator_id,create_time,checker_type,is_allowed,
+		class_time,location,start_time,cycle,rule,cut_off_time,sub_name,remark)
+		VALUES(#{check_id},#{name},#{end_time},#{creator_id},#{create_time},
+		#{checker_type},#{is_allowed},#{class_time},#{location},#{start_time},#{cycle},#{rule},#{cut_off_time},#{sub_name},#{remark})
+	</insert >
+	<delete id="delete">
+		delete from sign_in_check where id=#{id}
+	</delete>
+	<update id="modify" parameterType="com.halfmoon.cloudmanager.model.check.SignInCheck">
+		update 
+		sign_in_check set check_id=#{check_id},name=#{name},creator_id=#{creator_id},create_time=#{create_time},
+		checker_type=#{checker_type},is_allowed=#{is_allowed},sub_name=#{sub_name},rule=#{rule}
+		where id=#{id}
+	</update>
+	<update id="updateCheckId" >
+		update 
+		sign_in_check set check_id=#{check_id} 
+		where id=#{id}
+	</update>
+	<select id="getAllByUserId" parameterType="int" resultType="com.halfmoon.cloudmanager.model.check.dto.FirstView">
+		select check_id as check_id,name as check_name,sub_name as second_name 
+		from sign_in_check 
+		where creator_id=#{creator_id}
+	</select>
+	<select id="get" parameterType="Integer" resultType="com.halfmoon.cloudmanager.model.check.SignInCheck">
+		select * from sign_in_check where id=#{id}
+	</select>
+	
+	
+	
+	<select id="getNameByID" parameterType="int" resultType="String">
+		select name from sign_in_check where id=#{check_auto_id}
+	</select>
+	
+	<select id="getAutoId" resultType="int">
+		select id from sign_in_check where check_id=#{check_id} and creator_id=#{user_id}
+	</select>
+	
+	<select id="getSignHelps" resultType="com.halfmoon.cloudmanager.model.check.dto.SignHelp">
+		select id as check_auto_id,creator_id as creator_id,sub_name as sub_name from sign_in_check
+		where check_id=#{check_id} and check_id!=id
+	</select>
+	
+	<select id="getUserId" resultType="int">
+		select creator_id from sign_in_check where id=#{check_auto_id}
+	</select>
+	
+	<!-- 获取检查的两个名称 -->
+	<select id="getDName" resultType="com.halfmoon.cloudmanager.model.check.dto.FirstView">
+		select check_id as check_id,name as check_name,sub_name as second_name
+		from sign_in_check
+		where id=#{check_id}
+	</select>
+	
+	<!-- 更新检查名称 check_id=#{check_id} 所有的检查名称 -->
+	<update id="updateCheckName">
+		update sign_in_check
+		set name=#{check_name}
+		where check_id=#{check_id}
+	</update>
+	
+	
+	<update id="updateSubName">
+		update sign_in_check
+		set sub_name=#{sub_name}
+		where id=#{check_id}
+	</update>
+	
+	<!--通过check_id删除所有有关联的数据  -->
+	<delete id="deleteByCheckId">
+		delete
+		from sign_in_check 
+		where check_id=#{check_id}
+	</delete>
+	
+	<!-- 周期的处理 -->
+	<update id="updateCycle" parameterType="Map">
+		update sign_in_check
+		<trim prefix="set" suffixOverrides=",">
+  		<if test="time!=null">start_time=#{time},</if>
+ 		<if test="date!=null">cycle=#{date}</if>
+ 		</trim>
+ 		where check_id=#{check_id}
+	</update>
+</mapper>
+

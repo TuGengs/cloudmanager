@@ -1,0 +1,71 @@
+@charset "utf-8";
+/* CSS Document */
+.top {
+	width: 100%;
+	height: 60px;
+	line-height: 60px;
+	background-color: #393a3f;
+	color:#fff;
+	text-align: center;
+	font-size: 1.6em;
+	letter-spacing:1em;
+	font-weight:bold;
+}
+header {
+	height:40px;
+	line-height:40px;
+	width:100%;
+	color:#a5d8e0;
+	font-weight:bold;
+	font-size:1.6em;
+	text-align:center;
+	letter-spacing:1em;
+	border-bottom: 1px solid #d5d5d5;
+}
+.register2_box{ 
+	width:100%;
+	padding:120px 56px;
+	}
+.register2_form a{
+	display:block;
+	width:100%;
+	height:30px;
+	line-height:30px;
+	border-bottom:1px solid #a5d8e0;
+	font-size:1.5em;
+	margin-bottom:40px;
+	}
+.register2_form a i{
+	width:25%;
+	height:100%;
+	display:inline-block;
+	
+	}
+.register2_form input{
+	display:inline-block;
+	width:70%;
+	height:24px;
+	line-height:24px;
+	color:#333;
+	}
+.register2_form input[type="text"]{
+	border:none;
+	width:50%;
+	}
+.register2_box a.finish{
+	display:block;
+	width:100%;
+	height:30px;
+	line-height:30px;
+	background-color:#a5d8e0;
+	border-radius:10px;
+	text-align:center;
+	font-size:1.6em;
+	margin-top:20%;
+	cursor:point;
+	color:#fff;
+	font-weight:bold;
+	letter-spacing:1em;
+	}
+
+

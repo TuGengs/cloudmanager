@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE configuration PUBLIC  
+    "-//mybatis.org//DTD Config 3.0//EN"  
+    "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+
+	<!-- 自定义类型转换器 -->
+	<typeHandlers>
+	
+		<typeHandler handler="com.halfmoon.cloudmanager.dao.sql.JsonTypeHandler"></typeHandler>
+	
+	</typeHandlers>
+	
+	<mappers>
+	
+		<mapper resource="com/halfmoon/cloudmanager/mapper/user/UserMapper.xml" />
+		<mapper resource="com/halfmoon/cloudmanager/mapper/user/icon/IconMapper.xml" />
+		<mapper resource="com/halfmoon/cloudmanager/mapper/user/photo/PhotoMapper.xml" />
+		
+		<mapper resource="com/halfmoon/cloudmanager/mapper/school/SchoolMapper.xml" />
+		
+		<!-- <mapper resource="com/halfmoon/cloudmanager/mapper/check/SignInCheckMapper.xml" />
+		<mapper resource="com/halfmoon/cloudmanager/mapper/check/GradeCheckMapper.xml" /> -->
+	
+	</mappers>
+	
+</configuration>

@@ -1,0 +1,160 @@
+@charset "utf-8";
+/* CSS Document */
+body{
+	position:relative;
+	background:#eeeff3;
+	}
+header {
+	color:#0871e7;
+	padding-left:35px;
+	position:relative;
+	background:#fff;
+}
+header i{
+	font-family:"iconfont";
+	float:right;
+	color:#666;
+	}
+.sign-way{
+	position:fixed;
+	z-index:3;
+	top:100px;
+	width:100%;
+	height:87px;
+	background:#fff;
+	display:none;
+	border-bottom:1px solid #d5d5d5;
+	}
+.sign-way div{
+	width:50%;
+	height:100%;
+	padding:20px 55px;
+	float:left;
+	text-align:center;
+	}
+.sign3{
+	font-weight:bold;
+	}
+.sign3:nth-child(1){
+	font-weight:normal;
+	}
+.sign-way div i{
+	font-family:"iconfont";
+	font-size:25px;
+	font-weight:bold;
+	} 
+.sign-way div p{
+	margin-top:5px;
+	font-size:15px;
+	letter-spacing:1px;
+	}
+.input-num{
+	width:270px;
+	height:160px;
+	background:#fff;
+	position:fixed;
+	top:50%;
+	margin:-135px 0 0 -130px; 
+	z-index:25;
+	left:50%;
+	box-shadow:0 0 3px 3px #ccc;
+	position:relative;
+	padding-top:20px;
+	display:none;
+	}
+.input-num p{
+	padding-left:43px;
+	font-size:16px;
+	margin:15px auto 15px;
+	}
+.input-num input{
+	width:180px;
+	display:block;
+	margin:0 auto 40px;
+	border:none;
+	border-bottom:#4088da 1px solid;
+	padding-left:50px;
+	}
+.input-num a{
+	position:absolute;
+	bottom:0;
+	left:0;
+	font-size:14px;
+	text-align:center;
+	color:#fff;
+	font-weight:bold;
+	display:block;
+	background:#4088da;
+	width:100%;
+	height:46px;
+	line-height:46px;
+	letter-spacing:5px;
+	}
+#sign3-container{
+	width:90.7%;
+	margin:30px auto 60px;
+	}
+#sign3-container li.sign3{
+	width:100%;
+	height:75px;
+	padding:18px 30px 15px;
+	background:#fff;
+	margin-bottom:10px;
+	letter-spacing:3px;
+	}
+#sign3-container li div:nth-child(1){
+	width:60%;
+	float:left;
+	}
+#sign3-container li div:nth-child(2){
+	width:40%;
+	float:left;
+	}
+div.sign3-left p:nth-child(1){
+	font-size:1.4rem;
+	margin-bottom:15px;
+	}
+div.sign3-left p:nth-child(2){
+	font-size:1.2rem;
+	}
+div.sign3-left p a{
+	margin-left:12px;
+	}
+div.sign3-right{
+	text-align:right;
+	}
+div.sign3-right i{
+	width:70px;
+	height:30px;
+	line-height:23px;
+	padding-right:9px;
+	display:inline-block;
+	font-family:"iconfont";
+	font-size:30px;
+	vertical-align:super;
+}
+.blue{
+	color:#8cbfea;
+	}
+.green{
+	color:#55b55c;
+	}
+.grey{
+	color:#aaa;
+	}
+.grey p,.green p{
+	padding-right:11px;
+	}
+.red{
+	color:#d74d5a
+	}
+div.sign3-right p{
+	font-size:1rem;
+	}
+.bottom li:nth-child(1){
+	color:#0871e7;
+	}
+.bottom li:nth-child(1) span{
+	background-color:#0871e7;
+	}
+

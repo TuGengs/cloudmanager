@@ -1,0 +1,134 @@
+@charset "utf-8";
+/* CSS Document */
+body{
+	position:relative;
+	background:#eeeff3;
+	}
+header{
+	background:#fff;
+	color:#0871e7;
+	background:#fff;
+}
+header i{
+	font-family:"iconfont";
+	float:right;
+	color:#666;
+	}
+.check1-way{
+	position:fixed;
+	width:100%;
+	height:87px;
+	background:#fff;
+	border-bottom:1px solid #d5d5d5;
+	display:none;
+	top: 100px;
+	}
+.check1-way div{
+	width:33.3%;
+	height:100%;
+	padding:20px 22px;
+	float:left;
+	text-align:center;
+	border-right:1px solid #d5d5d5;
+	}
+.check1-way div:nth-child(3){
+	border-right:none;
+	}
+.check1-way div i{
+	font-family:"iconfont";
+	font-size:25px;
+	font-weight:bold;
+	}
+.check1-way div:nth-child(3) i{
+	font-size:30px;
+	} 
+.check1-way div p{
+	margin-top:5px;
+	font-size:13px;
+	letter-spacing:2px;
+	}
+.check1-way div:nth-child(3) p{
+	margin-top:0;
+	}
+.seclect-list{
+	padding-top:120px;
+	width:90.7%;
+	margin:0 auto ;
+	}
+
+.seclect-list li.check1,.seclect-class li.check1{
+	width:100%;
+	height:50px;
+	padding:5px 20px 5px;
+	background:#fff;
+	margin-bottom:10px;
+	}
+	.check1{
+		overflow: hidden;
+		width: 100%;
+	}
+.check1 span{
+	line-height:42px;
+	letter-spacing:5px;
+	font-size:1.4rem;
+	float: left;
+
+	}
+	.check1 span:nth-child(2){
+		float: right;
+	}
+	.check1 span i{
+		font-family: 'iconfont';
+		font-size: 16px;
+
+	}
+.bottom li:nth-child(3){
+	color:#0871e7;
+	}
+.bottom li:nth-child(3) span{
+	background-color:#0871e7;
+	}
+.select-check{
+	margin-top:60px;
+	width:100%;
+	height:40px;
+	border-bottom: 1px solid #d5d5d5;
+	background:#fff;
+	line-height:40px;
+	padding-left:39px;
+	font-weight:bold;
+	letter-spacing:8px;
+	font-size:14px;
+	position:fixed;
+	}
+.seclect-class{
+	width:90.7%;
+	margin:65px auto 0;
+	}
+.class{
+	margin-top:0;
+	}
+.seclect-class li.check1{
+	margin-bottom:0px;
+	margin-top:10px;
+	}
+.name-list{
+	background:#fff;
+	width:100%;
+	padding:10px 20px;
+	margin-bottom: 22%;
+	border-top:1px solid #d5d5d5;
+	}
+.name-list span{
+	margin-right:25px;
+	letter-spacing:3px;
+	font-size:13px;
+	}
+.name-list li{
+	line-height:25px;
+	}
+	.name-list li i{
+		font-family: 'iconfont';
+		font-size: 16px;
+		float: right;
+	}

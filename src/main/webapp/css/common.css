@@ -1,0 +1,204 @@
+
+@charset "utf-8";
+html {
+	outline: 0;
+	width: 100%;
+	height:100%;
+	-webkit-text-size-adjust: none;
+	-webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+html, body {
+	min-width: 320px;
+	max-width: 720px;
+	font-size: 10px;
+	width: 100%;
+	height:100%;
+	-webkit-overflow-scrolling: touch;
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-webkit-text-size-adjust: none;
+	font-family:"Helvetica";
+	color: #333;
+	margin: auto;
+}
+body {
+	background-color: #fff;
+	position:relative;
+}
+* {
+	box-sizing: border-box;
+}
+a {
+	-webkit-tap-highlight-color: transparent;
+}
+body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, code, form, fieldset, legend, input, button, textarea, select, p, blockquote, th, img, a {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	border: 0;
+}
+header, section, footer, nav, figure, figcaption, article, menu {
+	display: block;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+h1, h2, h3, h4, h5, h6 {
+	font-size: 100%;
+	font-weight: normal;
+}
+a {
+	outline: none;
+	color: #333;
+}
+a:link, a:visited, a:hover {
+	text-decoration: none;
+}
+a, img, fieldset {
+	border: none;
+}
+em, i, address {
+	font-style: normal;
+}
+button, select {
+	text-transform: none;
+}
+input, textarea {
+	outline: none;
+	resize: none;
+}
+button, input, textarea, select, optgroup, option, file {
+	font-family: inherit;
+	font-size: inherit;
+	font-style: inherit;
+	font-weight: inherit;
+	outline: none;
+	vertical-align: middle;
+}
+select {
+	background: none;
+	border: none;
+	-webkit-appearance: none;
+}
+input[type="text"], input[type="password"], input[type="tel"], textarea {
+	-webkit-appearance: none;
+	border: 1px solid #ddd;
+	border-radius: 0;
+	outline: none;
+}
+button[disabled], html input[disabled] {
+	cursor: default;
+}
+button::-moz-focus-inner, input::-moz-focus-inner {
+padding:0;
+border:0;
+}
+input[type="search"] {
+	-webkit-box-sizing: content-box;
+	-webkit-appearance: textfield;
+}
+input:focus::-webkit-input-placeholder {
+color:transparent;
+}
+button, html input[type="button"], input[type="reset"], 
+input[type="submit"] {
+	-webkit-appearance: button;
+	cursor: pointer;
+}
+input[type="search"]::-webkit-search-cancel-button, 
+input[type="search"]::-webkit-search-decoration {
+-webkit-appearance:none;
+}
+input{
+	background: transparent;
+}
+.disabled {
+	opacity: .5;
+}
+
+@-webkit-keyframes psdLoading {
+0% {
+-webkit-transform:rotate(0deg);
+}
+100% {
+-webkit-transform:rotate(360deg);
+}
+}
+
+.clear:after {content: "";display: block;height: 0;clear: both;}
+.lt { float:left!important;}
+.rt { float:right!important;}
+
+@font-face {
+  font-family: 'iconfont';  /* project id 187768 */
+  src: url('http://at.alicdn.com/t/font_uue7qgqyrddyrpb9.eot');
+  src: url('http://at.alicdn.com/t/font_uue7qgqyrddyrpb9.eot?#iefix') format('embedded-opentype'),
+  url('http://at.alicdn.com/t/font_uue7qgqyrddyrpb9.woff') format('woff'),
+  url('http://at.alicdn.com/t/font_uue7qgqyrddyrpb9.ttf') format('truetype'),
+  url('http://at.alicdn.com/t/font_uue7qgqyrddyrpb9.svg#iconfont') format('svg');
+}
+
+header {
+	position:fixed;
+	top:0px;
+	left:0;
+	height:47px;
+	line-height:40px;
+	width:100%;
+	color:#a5d8e0;
+	font-weight:bold;
+	font-size:1.6em;
+	text-align:center;
+	letter-spacing:1em;
+	border-bottom: 1px solid #d5d5d5;
+	z-index:3;
+}
+#page-container{
+	padding-top:65px;
+	width:85.33333333%;
+	margin:0 auto 60px;
+	}
+
+.bottom{
+	position:fixed;
+	bottom:0;
+	left:0;
+	z-index: 100;
+	width:100%;
+	height:60px;
+	padding:0 15px 0 15px;
+	background:#fff;
+	}
+.bottom li{
+	width:25%;
+	height:45px;
+	float:left;
+	color:#535353;
+	text-align:center;
+	position:relative;
+	}
+.bottom li span{
+	width:20px;
+	height:2px;
+	display:inline-block;
+	position:absolute;
+	
+	left:37%;
+	}
+
+.bottom li i{
+	margin-top:12px;
+	display:inline-block;
+	font-family:"iconfont";
+	font-size:20px;
+	}
+.bottom li p{
+	font-size:10px;
+	}
+.bot li{
+	width: 33%;
+}
+.bot li span{
+	left: 39%;
+}

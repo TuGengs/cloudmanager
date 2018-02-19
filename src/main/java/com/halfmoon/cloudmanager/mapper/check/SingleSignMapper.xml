@@ -1,0 +1,67 @@
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.halfmoon.cloudmanager.dao.sql.check.signcheck.impl.SingleSignDao">
+	
+	<insert id="add" parameterType="com.halfmoon.cloudmanager.model.check.SingleSignInCheck">
+		<selectKey resultType="Integer" order="AFTER" keyProperty="id">
+			select LAST_INSERT_ID() as id
+		</selectKey>
+		insert into single_sign_in_check(sign_in_check_id,create_time,remark) 
+						VALUE(#{sign_in_check_id},#{create_time},#{remark})
+	</insert>
+	
+	<update id="modify" parameterType="com.halfmoon.cloudmanager.model.check.SingleSignInCheck">
+		update 
+		table single_sign_in_check 
+		set sign_in_check_id = #{sign_in_check_id},create_time = #{create_time},remark=#{remark} 
+		where id = #{id}
+	</update>
+	
+	<select id="get" parameterType="int" resultType="com.halfmoon.cloudmanager.model.check.SingleSignInCheck">
+		select * from single_sign_in_check where id = #{id}
+	</select>
+	
+	<delete id="delete" parameterType="int">
+		delete from single_sign_in_check where id = #{id}
+	</delete>
+	
+	<!--  -->
+	<select id="getAll" resultType="com.halfmoon.cloudmanager.model.check.SingleSignInCheck">
+		select * 
+		from single_sign_in_check 
+		where sign_in_check_id=#{sign_in_check_id} order by create_time desc
+	</select>
+	
+	<select id="getCheck_id" resultType="int">
+		select sign_in_check_id 
+		from single_sign_in_check 
+		where id=#{single_id}
+	</select>
+	
+	<select id="getSingleId" resultType="int">
+		select id 
+		from single_sign_in_check 
+		where sign_in_check_id=#{check_id}
+	</select>
+	
+	<delete id="deleteByCheckId">
+		delete 
+		from single_sign_in_check
+		where sign_in_check_id=#{check_id}
+	</delete>
+	
+	<update id="updateRemark">
+		update single_sign_in_check
+		set remark=#{content} 
+		where id=#{single_id}
+	</update>
+	
+	<select id="getRemark" resultType="String">
+		select remark
+		from single_sign_in_check
+		where id=#{single_id}
+	</select>
+	
+</mapper>

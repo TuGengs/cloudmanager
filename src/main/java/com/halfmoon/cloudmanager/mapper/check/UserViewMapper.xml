@@ -1,0 +1,68 @@
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--  -->
+
+<mapper namespace="com.halfmoon.cloudmanager.dao.sql.check.signcheck.impl.UserViewDao">
+	
+  
+	<insert id="add" parameterType="com.halfmoon.cloudmanager.model.check.UserView">
+		<selectKey resultType="Integer" order="AFTER" keyProperty="id">
+			select LAST_INSERT_ID() as id
+		</selectKey>
+		insert into user_view(creator_id,sign_in_check_id,check_type)value(#{creator_id},#{sign_in_check_id},#{check_type})
+	</insert>
+	
+	<update id="modify" >
+		update user_view set creator_id=#{creator_id},sign_in_check_id=#{sign_in_check_id} check_type=#{check_type} where id=#{id}
+	</update>
+	<select id="get" parameterType="int" resultType="com.halfmoon.cloudmanager.model.check.UserView">
+		select * from user_view where id=#{id}
+	</select>
+	<delete id="delete">
+		delete from user_view where id=#{id}
+	</delete>
+	
+	<select id="getViewerList" resultType="com.halfmoon.cloudmanager.model.check.dto.UUInfo">
+		select id as user_id ,name as name,sysnum as sysnum
+		from user where id in (
+		select creator_id
+		from user_view 
+		where sign_in_check_id=#{check_id} and check_type=#{type})
+	</select>
+	
+	<delete id="deleteViewer">
+		delete 
+		from user_view 
+		where sign_in_check_id=#{check_id} and check_type=#{type} and creator_id=#{user_id}
+	</delete>
+	
+	<delete id="deleteByCheckId">
+		delete 
+		from user_view
+		where sign_in_check_id=#{check_id} and check_type=#{type}
+	</delete>
+	
+	<!-- 根据自增ID和user_id删除对应数据 -->
+	<delete id="deleteByAutoIdAndUserId">
+		delete 
+		from user_view
+		where sign_in_check_id=#{auto_id} and check_type=#{type} and creator_id=#{user_id}
+	</delete>
+	
+	<select id="getAllCheckView"  resultType="com.halfmoon.cloudmanager.model.check.dto.FirstView">
+		select s.check_id as check_id,s.name as check_name,s.sub_name as second_name
+		from sign_in_check s
+		where id in 
+		(select u.sign_in_check_id 
+		from user_view u
+		where u.creator_id=#{user_id} and u.check_type=#{type})
+	</select>
+	
+	<select id="isExist" resultType="int">
+		select IFNULL(SUM(id),0)
+		from user_view
+		where creator_id=#{user_id} and check_type=#{type} and sign_in_check_id=#{check_id}
+	</select>
+</mapper>
+

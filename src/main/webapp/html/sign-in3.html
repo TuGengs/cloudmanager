@@ -1,0 +1,108 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>签到状态3</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no">
+<meta name="apple-touch-fullscreen" content="YES">
+<meta name="format-detection" content="telephone=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<link rel="stylesheet" type="text/css" href="../css/common.css"/>
+<link rel="stylesheet" type="text/css" href="../css/sign-in3.css"/>
+</head>
+
+<body>
+	<div class="top">高校云管理</div>
+	<header>签到<i id="add-sign-way">&#xe66b;</i></header>
+    <div class="sign-way">
+    	<div class="scan" id='picture'>
+        	<i>&#xe625;</i>
+            <p>扫一扫</p>
+        </div>
+        <!--<video id="video" autoplay=""style='width:640px;height:480px'></video>
+		<canvas id="canvas" width="640" height="480"></canvas>-->
+        <div class="four-num">
+        	<i>&#xe67e;</i>
+            <p>四位数</p>
+        </div>
+    </div>
+    <div class="input-num">
+    	<p>四位数</p>
+        <form action="" method="post">
+        	<input type="text" name="four-num">
+        </form>
+        <a>确定</a>
+    </div>
+	<div id="sign3-container">
+    	<ul>
+        	<li class="sign3">
+            	<div class="sign3-left">
+                	<p>早起签到</p>
+                    <p>发起签到人:<a>张三</a></p>
+                </div>
+                <div class="sign3-right blue">
+                	<i>&#xe65b;</i>
+                    <p>正在签到</p>
+                </div>
+            </li>
+            <li class="sign3 signing">
+            	<div class="sign3-left">
+                	<p>高等数学</p>
+                    <p>发起签到人:<a>张三</a></p>
+                </div>
+                <div class="sign3-right green">
+                	<i>&#xe657;</i>
+                    <p>已签</p>
+                </div>
+            </li>
+            <li class="sign3 signing">
+            	<div class="sign3-left">
+                	<p>java程序设计</p>
+                    <p>发起签到人:<a>张三</a></p>
+                </div>
+                <div class="sign3-right grey">
+                	<i>&#xe659;</i>
+                    <p>未签</p>
+                </div>
+            </li>
+            <li class="sign3 signing">
+            	<div class="sign3-left">
+                	<p>晚归签到</p>
+                    <p>发起签到人:<a>张三</a></p>
+                </div>
+                <div class="sign3-right red">
+                	<i>&#xe602;</i>
+                    <p>未签成功</p>
+                </div>
+            </li>
+        </ul>
+    </div>
+    <div class="bottom">
+       	<ul>
+        	<li class="">
+            	<span></span>
+            	<i>&#xe61d;</i>
+                <p>签到</p>
+            </li>
+            <li class="">
+            	<span></span>
+            	<i>&#xe8cd;</i>
+                <p>检查</p>
+            </li>
+            <li class="">
+            	<span></span>
+            	<i>&#xe631;</i>
+                <p>查询</p>
+            </li>
+            <li class="">
+            	<span></span>
+            	<i>&#xe614;</i>
+                <p>个人设置</p>
+            </li>
+        </ul>
+    </div>
+    <script src="../js/addLoadEvent.js"></script>
+    <script src="../js/sign-in3-sign-way.js"></script>
+</body>
+</html>

@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+
+	<!-- 从properties文件里读取数据库信息 -->
+	<context:property-placeholder
+		ignore-unresolvable="true"
+		location="classpath:database/mysql.properties,
+			classpath:database/redis.properties" />
+
+	<!-- 配置druid数据库连接池 -->
+	<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
+
+		<!-- 数据库基本信息（用户名、密码等） -->
+		<property name="driverClassName" value="${mysql.driverClassName}"></property>
+		<property name="url" value="${mysql.url}"></property>
+		<property name="username" value="${mysql.username}"></property>
+		<property name="password" value="${mysql.password}"></property>
+
+		<!-- 初始化连接大小 -->
+		<property name="initialSize" value="0" />
+		<!-- 连接池最大使用连接数量 -->
+		<property name="maxActive" value="100" />
+		<!-- 连接池最小空闲 -->
+		<property name="minIdle" value="20" />
+		<!-- 获取连接最大等待时间 -->
+		<property name="maxWait" value="10000" />
+
+		<!-- 不缓存PreparedStatement -->
+		<property name="poolPreparedStatements" value="false" />
+
+		<property name="validationQuery" value="SELECT 1"></property>
+		<property name="testWhileIdle" value="true" />
+		<property name="testOnBorrow" value="false" />
+		<property name="testOnReturn" value="true" />
+
+		<!-- 每隔60秒检测一次连接情况 -->
+		<property name="timeBetweenEvictionRunsMillis" value="60000"></property>
+
+	</bean>
+
+	<!-- 配置Jedis数据库连接池 -->
+	<bean id="jedisPoolConfig" class="redis.clients.jedis.JedisPoolConfig">
+
+		<!-- 连接池最大连接数量 -->
+		<property name="maxIdle" value="100"></property>
+		<!-- 连接池最小连接数量 -->
+		<property name="minIdle" value="20"></property>
+		<!-- 最大等待连接时间 -->
+		<property name="maxWaitMillis" value="10000"></property>
+
+	</bean>
+
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="configLocation" value="classpath:framework/mybatis/mapper-config.xml"></property>
+		<property name="mapperLocations">
+			<list>
+				<value>classpath:com/halfmoon/cloudmanager/mapper/check/*.xml</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
+		<constructor-arg index="0" ref="sqlSessionFactory" />
+	</bean>
+
+	<bean id="jedisPool" class="redis.clients.jedis.JedisPool">
+		<constructor-arg index="0">
+			<ref bean="jedisPoolConfig"></ref>
+		</constructor-arg>
+		<constructor-arg index="1">
+			<value>${redis.host}</value>
+		</constructor-arg>
+		<constructor-arg index="2">
+			<value>${redis.port}</value>
+		</constructor-arg>
+		<constructor-arg index="3">
+			<value>10000</value>
+		</constructor-arg>
+		<constructor-arg index="4">
+			<value>${redis.password}</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean class="com.halfmoon.cloudmanager.dao.nosql.tel.impl.TelDao">
+		<property name="jedisPool" ref="jedisPool"></property>
+	</bean>
+
+	<bean id="transactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+
+</beans>

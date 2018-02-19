@@ -1,0 +1,123 @@
+.col-6{
+    float: left;
+    width: 50%;
+}
+.clearfix:after{
+    content: '';
+    display: block;
+    clear: both;
+}
+.title{
+    text-align: center;
+    color: #2E82E9;
+    padding: 10px 30px;
+    font-size: 18px;
+    font-weight: 700;
+    font-family: 微软雅黑;
+    letter-spacing: 10px;
+}
+.house{
+    font-size: 16px;
+    font-family: "微软雅黑";
+}
+.house .panel-title{
+    border-top:1px solid #dddddd;
+    border-bottom:1px solid #dddddd;
+    padding: 10px 30px;
+    font-size: 16px;
+
+}
+.house .panel-title .caret{
+    float:right;
+    transform: rotate(-90deg);
+    font-weight: 600;
+    transition:all 1s;
+}
+.dormitory-list{
+    padding: 10px 30px;
+}
+.dormitory{
+    letter-spacing: 5px;
+}
+.dormitory h3{
+    border-bottom: 1px solid #dddddd;
+    margin-bottom: 10px;
+    padding: 15px;
+}
+.dormitory .add-item{
+    padding: 5px;
+    text-align: center;
+}
+.dormitory .add-item .item{
+    color: #aba8a8;
+}
+.dormitory .add-item .head{
+    color: #aba8a8;
+}
+.dormitory .add-all{
+    border: 2px dashed #cccccc;
+    color: #aba8a8;
+    letter-spacing: 2px;
+}
+.dormitory .add-one{
+    border-bottom: 2px dashed #cccccc;
+}
+.dormitory .add-noe .name{
+    text-align: center;
+}
+.dormitory .add-result{
+    margin-top: 10px;
+}
+.dormitory .save{
+    background-color:#0871E7;
+    padding: 5px 20px;
+    margin:20px auto;
+    display: block;
+    color: #ffffff;
+    display: none;
+}
+
+
+.accordion .panel-content{
+   display: none;
+}
+.content-list{
+    border-bottom: 2px solid #cccccc;
+}
+.collapse {
+    display: none;
+    visibility: hidden
+}
+
+.collapse.in {
+    display: block;
+    visibility: visible
+}
+
+.collapsing {
+    position: relative;
+    height: 0;
+    overflow: hidden;
+    -webkit-transition-timing-function: ease;
+    -o-transition-timing-function: ease;
+    transition-timing-function: ease;
+    -webkit-transition-duration: .35s;
+    -o-transition-duration: .35s;
+    transition-duration: .35s;
+    -webkit-transition-property: height,visibility;
+    -o-transition-property: height,visibility;
+    transition-property: height,visibility
+}
+
+
+.ico{
+    display: inline-block;
+}
+.subtract{
+    transform: rotate(45deg);
+}
+
+.caret.rotate{
+    transform: rotate(90deg)!important;
+
+}

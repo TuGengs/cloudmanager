@@ -1,0 +1,37 @@
+@charset "utf-8";
+/* CSS Document */
+.info-name li{
+	 width:25%;
+	 padding-left:0; 
+	}
+.info-name li i{
+	font-size:14px;
+	margin-left:0;
+	}
+.name-num-info li.absence{
+	color:#fe5129;
+	}
+.mark span.more{
+	background:#77cf85;
+	}
+.stu-info{
+	font-size:12px;
+	}
+
+.name-num-info li{
+	width:25%;
+	padding-left:0;
+	font-size:13px;
+	white-space:nowrap;
+	overflow:hidden;
+	text-overflow:ellipsis;
+	}
+	.name-num-info li.num{
+	width:27%;
+	}
+	.name-num-info li.name{
+	width:23%;
+	}
+.face{
+	color:#fff;
+	}

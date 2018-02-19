@@ -1,0 +1,174 @@
+@charset "utf-8";
+/* CSS Document */
+body{
+	position:relative;
+	background:#eeeff3;
+	}
+header{
+	color:#0871e7;
+	background:#fff;
+}
+header i{
+	font-family:"iconfont";
+	float:right;
+	color:#666;
+	}
+.all-info{
+	width:100%;
+	height:60px;
+	border-bottom:1px solid #d9d9d9;
+	margin-top:60px;
+	background-color:#fff;
+	}
+	
+.all-info li{
+	width:25%;
+	float:left;
+	text-align:center;
+	line-height:25px;
+	padding-top:10px;
+	color:#288ae1;
+	font-weight:bold;
+	letter-spacing:2px;
+	}
+.all-info li:nth-child(1){
+	position: relative;
+}
+.all-info li:nth-child(1) i{
+	font-family: "iconfont";
+	position: absolute;
+	right: -16px;
+	font-size: 16px;
+    bottom: -2px;
+}
+.all-info li input{
+	width: 100%;
+	border: none;
+	padding-left: 8px;
+	color: #288ae1;
+}
+.all-info li em{
+	width:100%;
+	display:block;
+	letter-spacing:4px;
+	}
+
+.sec1{
+	height:483px;
+	width:90%;
+    margin: 10px auto;
+	background:#fff;
+	clear:both;
+	position: relative;
+	}
+.header{
+	width:100%;
+	clear:both;
+	height:40px;
+	border-bottom:1px solid #d9d9d9;
+	}
+.header h1{
+	width:33%;
+	height:100%;
+	line-height:40px;
+	text-align:center;
+	float:left;
+	color:#288ae1;	
+	letter-spacing:4px;
+	}
+.names{
+	padding-top:15px;
+	}
+.names ul{
+	width:33%;
+	float:left;
+	text-align:center;
+	line-height:25px;
+	}
+.names ul:nth-child(1){
+	color:#ff5151;
+	}
+.names ul:nth-child(2){
+	border:1px dashed #ccc;
+	border-top:none;
+	border-bottom:0;
+	color:#00a600;
+	}
+.names ul:nth-child(3){
+	color:#0080ff;
+	}
+h1.red{
+	color:#ff5151;
+	}
+h1.green{
+	color:#00a600;
+	}
+h1.blue{
+	color:#0080ff;
+	}
+.sec3{
+	position: absolute;
+	bottom: 0;
+	border-top: 1px solid #d9d9d9;
+}
+.sec3 textarea{
+	color: #0871e7;
+	text-indent: 1em;
+	border: none;
+	padding-top: 5px;
+}
+
+/* look5.html*/
+.sec2{
+	margin-top: 10px;
+	background: #fff;
+	padding: 10px 0;
+}
+.zong{
+	padding-bottom: 10px;
+	border-bottom: 1px solid #ddd;
+}
+.zong em{
+	font-size: 1rem;
+	color: #288ae1;
+	margin-left: 10%;
+	line-height: 1.6rem;
+	font-weight: bold;
+}
+.zong em:nth-child(1){
+	font-size: 1.4rem;
+}
+.zong em:nth-child(2){
+	margin-left: 30%;
+}
+.content{
+    width: 80%;
+    margin: 10px auto;
+}
+.content li{
+	line-height: 1.7rem;
+}
+.content em{
+	font-size: 1rem;
+	margin-left: 19%;
+}
+.content em:nth-child(1){
+	margin-left: 0;
+}
+.content i{
+    font-family: "iconfont";
+    font-size: 16px;
+    color: #0080ff;
+}
+.chi{
+	color: #ff5151;
+}
+.rest{
+	color: #0080ff;
+}
+.qian{
+	color: #00a600;
+}
+.info{
+	display: none;
+}

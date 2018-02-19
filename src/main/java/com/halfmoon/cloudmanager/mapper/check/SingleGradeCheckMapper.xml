@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+	
+<!-- 
+ * @author LITAO
+ * @time 下午4:38:52  2017年3月11日
+ * @修改 在原有代码上新添了我自己的sql
+ -->
+ 
+
+	
+<mapper namespace="com.halfmoon.cloudmanager.dao.sql.check.gradecheck.impl.SingleGradeCheckDao">
+	
+	<!-- 添加一条新的检查记录 -->
+	<insert id="addNewRecord" >
+		insert into single_grade_check
+		(grade_check_id, create_time)
+		values
+		(#{grade_check_id}, now())
+		<!-- 还是用原生函数now算啦，需要注意的是MySQL需要用datetime这个类型 -->
+	</insert>
+	
+	<!-- 删除表中一条记录 -->
+	<delete id="deleteRecord" parameterType="com.halfmoon.cloudmanager.model.check.SingleGradeCheck">
+		delete from single_grade_check where id = #{id}
+	</delete>
+	
+	<!-- 查找同一个grade_check_id下的所有记录 -->
+	<select id="searchRecord" parameterType="com.halfmoon.cloudmanager.model.check.SingleGradeCheck"
+		resultType="com.halfmoon.cloudmanager.model.check.SingleGradeCheck">
+		select * from single_grade_check 
+		where 
+		grade_check_id = #{grade_check_id}
+	</select>
+	
+	<select id="getLastInsertId" resultType="int">
+		select last_insert_id()
+	</select>
+	
+</mapper>

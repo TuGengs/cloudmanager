@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc 
+		http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd
+		http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context 
+		http://www.springframework.org/schema/context/spring-context-4.3.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
+		
+		<bean id="sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate">  
+        <constructor-arg ref="sqlSessionFactory" />  
+    </bean>  
+<!-- 注解式事务管理    -->
+    <aop:aspectj-autoproxy proxy-target-class="true" />
+	<!-- 
+		<tx:annotation-driven transaction-manager="transactionManager"  proxy-target-class="true" order="10"/>  
+	-->
+	<context:annotation-config />  
+	<context:component-scan base-package="com.halfmoon.cloudmanager.*">  
+	        <context:exclude-filter type="annotation"  
+	            expression="org.springframework.stereotype.Controller" />  
+	</context:component-scan>
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+	  <property name="dataSource" ref="dataSource" />
+	</bean>
+	<!-- 数据库的事务管理器配置--> 
+    <bean id="transactionManager"
+        class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource" />
+    </bean>
+	<!-- 配置spring异常转换功能 -->
+	<import resource="../mybatis/database-config.xml"/>
+	
+	<bean id="log4jInitialization"
+          class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+        <property name="targetClass"
+                  value="org.springframework.util.Log4jConfigurer" />
+        <property name="targetMethod" value="initLogging" />
+        <property name="arguments">
+            <list>
+                <value>classpath:framework/log4j.xml</value>
+            </list>
+        </property>
+    </bean>
+    
+</beans>

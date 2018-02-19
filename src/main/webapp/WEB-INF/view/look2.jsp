@@ -1,0 +1,95 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>查看界面</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no">
+<meta name="apple-touch-fullscreen" content="YES">
+<meta name="format-detection" content="telephone=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<link rel="stylesheet" type="text/css" href="../css/common.css"/>
+<link rel="stylesheet" type="text/css" href="../css/look1.css"/>
+</head>
+
+<body>
+	<div class="top">高校云管理</div>
+	<header>查看<i id="add-check1-way">&#xe66b;</i></header>
+     <div class="check1-way">
+    	<div id="find">
+        	<i>&#xe65d;</i>
+            <p>ID查找</p>
+        </div>
+        <div>
+        	<i>&#xe625;</i>
+            <p>扫一扫</p>
+        </div>
+    </div>
+    <div class="id-way">
+    <form action="" method="">
+        <div class="input-id">
+        	<li><span>I&nbsp;D&nbsp;帐&nbsp;&nbsp;号:</span><input type="text" name="user-name"></li>
+            <li><span>I&nbsp;D&nbsp;密&nbsp;&nbsp;码:</span><input type="password" mane="password"></li>
+        </div>
+		<a href="look3.html">
+        	<div class="ok">
+       			<i>&#xe638;</i>
+       		</div>
+        </a>
+    </form>
+    </div>
+	<div id="check1-container">
+    	<ul>
+        	<a href="check2.html">
+                <li class="check1">
+                    <span>早检签到</span>
+                    <span>软件1411班</span>
+                </li>
+            </a>
+            <a href="check2.html">
+           <li class="check1">
+            	<span>早检签到</span>
+                <span>软件1511班</span>
+            </li>
+            </a>
+            <a href="check2.html">
+            <li class="check1">
+            	<span>早检签到</span>
+                <span>软件1611班</span>
+            </li>
+            </a>
+            <li class="check1">
+            	<span>早检签到</span>
+                <span>软件1612班</span>
+            </li>  
+        </ul>
+        <a href="look3.html" class="all-info">汇总</a>
+    </div>
+    <div class="bottom">
+       	<ul>
+        	<li class="">
+            	<span></span>
+            	<i>&#xe61d;</i>
+                <p>签到</p>
+            </li>
+            <li class="">
+            	<span></span>
+            	<i>&#xe8cd;</i>
+                <p>检查</p>
+            </li>
+            <li class="">
+            	<span></span>
+            	<i>&#xe668;</i>
+                <p>查看</p>
+            </li>
+            <li class="">
+            	<span></span>
+            	<i>&#xe614;</i>
+                <p>个人设置</p>
+            </li>
+        </ul>
+    </div>
+    <script src="../js/addLoadEvent.js"></script>
+   <script src="../js/look.js"></script>
+</body>
+</html>

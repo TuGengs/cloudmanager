@@ -1,0 +1,54 @@
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--  -->
+
+<mapper namespace="com.halfmoon.cloudmanager.dao.sql.check.signcheck.impl.ShareDao">
+	
+	<insert id="add" parameterType="com.halfmoon.cloudmanager.model.check.Share">
+		<selectKey resultType="Integer" order="AFTER" keyProperty="id">
+			select LAST_INSERT_ID() as id
+		</selectKey>
+		insert into share_check(sign_in_check_id,account,password,check_type,is_open)
+		value(#{sign_in_check_id},#{account},#{password},#{check_type},#{is_open})
+	</insert>
+	
+	<update id="modify" >
+		update 
+		share_check set sign_in_check_id=#{sign_in_check_id},
+		account=#{account},passwor"src/main/java/com/halfmoon/cloudmanager/mapper/check/ShareMapper.xml"d=#{password},check_type=#{check_type}
+		where id=#{id}
+	</update>
+	
+	<select id="get" parameterType="int" resultType="com.halfmoon.cloudmanager.model.check.Share">
+		select * from share_check where id=#{id}
+	</select>
+	
+	<select id="getByAccount" resultType="com.halfmoon.cloudmanager.model.check.Share">
+		select * from share_check where account=#{account}
+	</select>
+	
+	<select id="getInfo" resultType="com.halfmoon.cloudmanager.model.check.dto.ShareInfo">
+		select account as account ,password as password,is_open as is_open 
+		from share_check 
+		where sign_in_check_id=#{check_id} and check_type=#{type}
+	</select>
+	
+	<update id="updatePwd">
+		update 
+		share_check set password=#{pwd} 
+		where sign_in_check_id=#{check_id} and check_type=#{type}
+	</update>
+	<update id="updateStatus">
+		update 
+		share_check set is_open=#{is_open} 
+		where sign_in_check_id=#{check_id} and check_type=#{type}
+	</update>
+	
+	<delete id="deleteByCheckId">
+		delete
+		from share_check
+		where sign_in_check_id=#{check_id} and check_type=#{type}
+	</delete>
+</mapper>
+
